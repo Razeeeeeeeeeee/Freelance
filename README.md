@@ -8,8 +8,8 @@ The layout is designed as follows:
 
 
 # Todo
-- [x]~~ Add support for the home page~~
-- [x]~~ Add support for candidate page~~
+- [x]<s> Add support for the home page </s>
+- [x]<s> Add support for candidate page </s>
 - [ ] Add support for candidate manual entry
 - [ ] Add support for employer page
 - [ ] Add support for employer manual entry
