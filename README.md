@@ -1,4 +1,10 @@
 # Quickstart
+To run the website locally, clone the repo and run
+```
+npm install
+npm run dev
+```
+
 The layout is designed as follows:
 ## Homepage
 ![Homepage](./src/assets/homepage.png)
