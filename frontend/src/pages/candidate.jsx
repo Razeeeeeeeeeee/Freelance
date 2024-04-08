@@ -62,7 +62,7 @@ export default function(){
             <form id="file_upload">
                 <div className="flex justify-center mt-0 p-0"><input className="flex file-input w-full max-w-xs rounded-lg text-xs " id="f" type="file" onChange={ (evnt)=>{handleFileChange(evnt)} }></input></div>
             </form>
-            <div className="pt-10 font-light text-gray-400 text-sm">If you want to enter the details manually, <Link className="underline text-zinc-900 " to="/candidate_manual">Click here!</Link> </div>
+            <div className="pt-10 font-light text-gray-400 text-sm">If you want to enter the details manually, <Link className="underline text-zinc-900 " to="/candidate_form">Click here!</Link> </div>
 
 
       </Card>
