@@ -3,7 +3,29 @@ import { Link } from "react-router-dom";
 
 export default function(){
     
+  
+    const initialFormData = {
+      Jobname: '',
+      Skillrequirement: '',
+      budget: '',
+      max_workers: '',
+      min_workers: '',
+      mode: '',
+      Ad_date: '',
+      dead_date:'',
+    };
+  
+  
+    const [formData, setFormData] = useState(initialFormData);
 
+
+    const handleClear = () => {
+      setFormData(initialFormData);
+    };
+
+    const handleChange = (e) => {
+      setFormData(e.target.value);
+    };
 
     return(
       <div className="flex flex-col pt-32 justify-center px-0 pb-20">
@@ -18,6 +40,8 @@ export default function(){
            type="text"
              id="specificNumber"
              name="specificNumber"
+             value = {formData.Jobname}
+             onChange={handleChange}
              className="border rounded w-17 px-2 py-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline align-baseline"
            />
            </div>
@@ -27,6 +51,8 @@ export default function(){
            type="text"
              id="specificNumber"
              name="specificNumber"
+             value = {formData.Skillrequirement}
+             onChange={handleChange}
              className="border rounded w-17 px-2 py-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline align-baseline"
            />
            </div>
@@ -36,6 +62,9 @@ export default function(){
            type="text"
              id="specificNumber"
              name="specificNumber"
+             value = {formData.budget}
+             onChange={handleChange}
+             placeholder="Enter the value in INR"
              className="border rounded w-17 px-2 py-1 ml-5 text-gray-700 leading-tight focus:outline-none focus:shadow-outline align-baseline"
            />
            </div>
@@ -45,7 +74,10 @@ export default function(){
            type="text"
              id="specificNumber"
              name="specificNumber"
+             value = {formData.max_workers}
+             onChange={handleChange}
              className="border rounded w-17 px-2 py-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline align-baseline"
+             placeholder="Enter an Integer"
            />
            </div>
            <div className="flex justify-center mx-20 mb-5">
@@ -54,6 +86,9 @@ export default function(){
            type="text"
              id="specificNumber"
              name="specificNumber"
+             value = {formData.min_workers}
+             onChange={handleChange}
+             placeholder="Enter an Integer"
              className="border rounded w-17 px-2 py-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline align-baseline"
            />
            </div>
@@ -62,6 +97,8 @@ export default function(){
            <select
              id="mode"
              name="mode"
+             value = {formData.mode}
+             onChange={handleChange}
              className="shadow appearance-none border rounded w-half py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           >
           <div className="mt-4"></div>
@@ -82,6 +119,8 @@ export default function(){
                          type="date"
                          name="date"
                          id="date"
+                         value = {formData.Ad_date}
+                         onChange={handleChange}
                          class=" rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
                        />
                      </div>
@@ -98,6 +137,8 @@ export default function(){
                          type="date"
                          name="date"
                          id="date"
+                         value = {formData.dead_date}
+                         onChange={handleChange}
                          class=" rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
                        />
                      </div>
@@ -105,7 +146,7 @@ export default function(){
                  
                  <div className="">
                 <button className="btn btn-primary rounded-md mr-10 mt-10">Save</button>
-                <button className="btn btn-primary rounded-md ml-10 mt-10">Clear Description</button>
+              <button  onClick ={handleClear} className="btn btn-primary rounded-md ml-10 mt-10">Clear Description</button>
                 </div>
           
 
