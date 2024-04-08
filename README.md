@@ -1,5 +1,6 @@
 # Quickstart
 I have moved things around a bit, mostly to keep the backend and the frontend separate
+The backend is configured in `django` and the frontend with `ReactJS`
 To run the website locally, clone the repo and run
 
 
@@ -23,7 +24,11 @@ python manage.py runserver
 ```
 
 
-
+> [!IMPORTANT]
+> The backend endpoints are configured as follows
+>   `/api/employee_upload` for uploading files of the employer
+>   `/api/candidate_upload` for uploading files of the candidate
+> The files are configured to be saved in the `/uploads` folder in the backend in their own respective folders
 
 # Todo
 - [x] Add support for the home page 
