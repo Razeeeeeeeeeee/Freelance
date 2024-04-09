@@ -28,7 +28,7 @@ export default function(){
                     <Link className="btn btn-ghost text-xl" to="/employer">Employer</ Link>
                 </div>
                 <div className="flex">
-                    <Link className="btn btn-ghost text-xl" to="/candidate">Admin</ Link>
+                    <Link className="btn btn-ghost text-xl" to="/admin_panel">Admin</ Link>
                 </div>
             </div>
             </div>

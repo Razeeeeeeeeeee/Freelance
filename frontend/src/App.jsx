@@ -8,7 +8,7 @@ import Offlline_mode_candi from './pages/offlline_mode_candi'
 import Employer from './pages/employer'
 import Employer_manual from './pages/employer_manual'
 import Employer_offline from './pages/employer_offline'
-
+import Admin_panel from './pages/admin_panel'
 
 function App() {
 
@@ -24,6 +24,7 @@ function App() {
           <Route path = '/employer' element = {<Employer/>}/>
           <Route path = '/employer_form' element = {<Employer_manual/>}/>
           <Route path = '/employer_offline' element = {<Employer_offline/>}/>
+          <Route path = '/admin_panel' element = {<Admin_panel/>}/>
         </Routes>
      </BrowserRouter>
 
