@@ -13,7 +13,7 @@ return(
             <div className="font-bold text-3xl pb-10">
             Choose one from below
             </div>
-        <button className="btn btn-primary rounded-md mr-10">Employer</button>
+        <button className="btn btn-primary rounded-md mr-10" onClick={()=> navigate('/employer')}>Employer</button>
         <button className="btn btn-primary rounded-md ml-10" onClick={()=> navigate('/candidate')}>Candidate</button>
         </div>
         </Card>

@@ -30,7 +30,7 @@ return(
     <div className="grid grid-flow-col grid-cols-11">
       <div className="sm:border-solid sm:border-2 rounded-md py-10 px-0 mr-10 drop-shadow-lg grid col-span-7 col-start-4">
         <div className="font-bold pb-10 text-3xl">
-          Current Location
+          Job Location
           </div>
 
        

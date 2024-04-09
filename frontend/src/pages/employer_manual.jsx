@@ -45,13 +45,13 @@ export default function(){
         <div className="grid grid-flow-col grid-cols-11">
           <div className="sm:border-solid sm:border-2 rounded-md py-10 px-0 drop-shadow-lg grid col-span-5 col-start-4">
             <div className="font-bold pb-10 text-3xl">
-              Candidate Form
+              Employer Form
               </div>
 
       
        
           <div className="flex justify-center mx-20 mb-5">
-           <label  className="align-baseline font-medium text-[#07074D] mx-20" >Candidate Name</label>
+           <label  className="align-baseline font-medium text-[#07074D] mx-20" >Job Name</label>
            <input
            type="text"
              id="Jobname"
@@ -62,7 +62,7 @@ export default function(){
            />
            </div>
            <div className="flex justify-center mx-20 mb-5">
-           <label  className="align-baseline font-medium text-[#07074D] ml-14 mr-12" >Skills</label>
+           <label  className="align-baseline font-medium text-[#07074D] ml-14 mr-12" >Skill Requirement</label>
            <input
            type="text"
              id="Skillrequirement"
@@ -73,7 +73,7 @@ export default function(){
            />
            </div>
            <div className="flex justify-center mx-20 mb-5">
-           <label  className="align-baseline font-medium text-[#07074D] ml-14 mr-10 pl-2" >Desired Salary</label>
+           <label  className="align-baseline font-medium text-[#07074D] ml-14 mr-10 pl-2" >Budget allotted</label>
            <input
            type="text"
              id="budget"
@@ -84,9 +84,32 @@ export default function(){
              className="border rounded w-17 px-2 py-1 ml-5 text-gray-700 leading-tight focus:outline-none focus:shadow-outline align-baseline"
            />
            </div>
-
+           <div className="flex justify-center mx-20 mb-5">
+           <label  className="align-baseline font-medium text-[#07074D] ml-9 mr-0 pr-10" >Max Workers Required</label>
+           <input
+           type="text"
+             id="max_workers"
+             name="max_workers"
+             value = {formData.max_workers}
+             onChange={handleChange}
+             className="border rounded w-17 px-2 py-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline align-baseline"
+             placeholder="Enter an Integer"
+           />
+           </div>
+           <div className="flex justify-center mx-20 mb-5">
+           <label  className="align-baseline font-medium text-[#07074D] ml-9 mr-0 pr-10" >Min Workers Required</label>
+           <input
+           type="text"
+             id="min_workers"
+             name="min_workers"
+             value = {formData.min_workers}
+             onChange={handleChange}
+             placeholder="Enter an Integer"
+             className="border rounded w-17 px-2 py-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline align-baseline"
+           />
+           </div>
            <div className="mb-4">
-                 <label className="mt-3 ml-10 mr-8 block text-base font-medium text-[#07074D]">Mode</label>
+                 <label className="mt-3 ml-10 mr-8 block text-base font-medium text-[#07074D]">Job Location</label>
            <select
              id="mode"
              name="mode"
@@ -106,7 +129,7 @@ export default function(){
                          htmlFor="date"
                          className="mb-3 block text-base font-medium text-[#07074D]"
                        >
-                       Available from 
+                       Advertisement Date
                        </label>
                        <input
                          type="date"
@@ -124,7 +147,7 @@ export default function(){
                          htmlFor="dead_date"
                          className="mb-3 block text-base font-medium text-[#07074D]"
                        >
-                       Available till 
+                       Deadline Date
                        </label>
                        <input
                          type="date"
@@ -140,7 +163,7 @@ export default function(){
                 {formData.mode == "online" ? 
                 (<div className=""><button className="btn btn-primary rounded-md mr-10 mt-10" >Save</button>
                 <button  onClick ={handleClear} className="btn btn-primary rounded-md ml-10 mt-10">Clear Description</button></div>) : 
-                (<div className=""><button className="btn btn-primary rounded-md mr-10 mt-10" onClick={()=> navigate('/offlline_mode_candi')}>Next</button> 
+                (<div className=""><button className="btn btn-primary rounded-md mr-10 mt-10" onClick={()=> navigate('/employer_offline')}>Next</button> 
                 <button  onClick ={handleClear} className="btn btn-primary rounded-md ml-10 mt-10">Clear Description</button></div>
                 )}
                  
