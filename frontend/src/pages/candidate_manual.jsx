@@ -50,26 +50,26 @@ export default function(){
 
       
        
-          <div className="flex justify-center mx-20 mb-5">
-           <label  className="align-baseline font-medium text-[#07074D] mx-20" >Candidate Name</label>
+          <div className="flex justify-center ml-20 mr-10 mb-5">
+           <label  className="align-baseline font-medium text-[#07074D] ml-10 mr-10" >Candidate Name</label>
            <input
            type="text"
              id="Jobname"
              name="Jobname"
              value = {formData.Jobname}
              onChange={handleChange}
-             className="border rounded w-17 px-2 py-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline align-baseline"
+             className="border rounded w-17 py-1 pl-8 mr-10 ml-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline align-baseline"
            />
            </div>
-           <div className="flex justify-center mx-20 mb-5">
-           <label  className="align-baseline font-medium text-[#07074D] ml-14 mr-12" >Skills</label>
+           <div className="flex justify-center ml-20 mr-10 mb-5">
+           <label  className="align-baseline font-medium text-[#07074D] ml-14 mr-20" >Skills</label>
            <input
            type="text"
              id="Skillrequirement"
              name="Skillrequirement"
              value = {formData.Skillrequirement}
              onChange={handleChange}
-             className="border rounded w-17 px-2 py-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline align-baseline"
+             className="border rounded w-17 pr-0 mr-0 py-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline align-baseline"
            />
            </div>
            <div className="flex justify-center mx-20 mb-5">
