@@ -33,8 +33,9 @@ python manage.py runserver
 # Todo
 - [x] Add support for the home page 
 - [x] Add support for candidate page 
-- [ ] Add support for candidate manual entry
+- [x] Add support for candidate manual entry
 - [x] Add support for employer page
-- [ ] Add support for employer manual entry
+- [x] Add support for employer manual entry
 - [x] Backend for file uploads
+- [ ] Add final admin page
 - [ ] Backend for the algorithm
