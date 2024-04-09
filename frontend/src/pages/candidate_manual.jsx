@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function(){
     
-  
+  const navigate = useNavigate();
+
+
     const initialFormData = {
       Jobname: '',
       Skillrequirement: '',
@@ -27,6 +30,8 @@ export default function(){
       setFormData(e.target.value);
     };
 
+
+
     return(
       <div className="flex flex-col pt-32 justify-center px-0 pb-20">
         <div className="grid grid-flow-col grid-cols-11">
@@ -34,6 +39,9 @@ export default function(){
             <div className="font-bold pb-10 text-3xl">
               Candidate Form
               </div>
+
+      
+       
           <div className="flex justify-center mx-20 mb-5">
            <label  className="align-baseline font-medium text-[#07074D] mx-20" >Job Name</label>
            <input
@@ -144,10 +152,14 @@ export default function(){
                      </div>
                  </div>
                  
-                 <div className="">
-                <button className="btn btn-primary rounded-md mr-10 mt-10">Save</button>
-              <button  onClick ={handleClear} className="btn btn-primary rounded-md ml-10 mt-10">Clear Description</button>
-                </div>
+                {formData.mode === "online" ? 
+                (<div className=""><button className="btn btn-primary rounded-md mr-10 mt-10" >Save</button>
+                <button  onClick ={handleClear} className="btn btn-primary rounded-md ml-10 mt-10">Clear Description</button></div>) : 
+                (<div className=""><button className="btn btn-primary rounded-md mr-10 mt-10" onClick={()=> navigate('/offline_mode_candi')}>Next</button> 
+                <button  onClick ={handleClear} className="btn btn-primary rounded-md ml-10 mt-10">Clear Description</button></div>
+                )}
+                 
+                
           
 
         </div>
