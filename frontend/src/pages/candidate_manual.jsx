@@ -7,13 +7,15 @@ export default function(){
   const navigate = useNavigate();
 
 
+  
+
     const initialFormData = {
       Jobname: '',
       Skillrequirement: '',
       budget: '',
       max_workers: '',
       min_workers: '',
-      mode: '',
+      mode: 'offline',
       Ad_date: '',
       dead_date:'',
     };
@@ -23,11 +25,17 @@ export default function(){
 
 
     const handleClear = () => {
+      console.log(formData)
       setFormData(initialFormData);
     };
 
     const handleChange = (e) => {
-      setFormData(e.target.value);
+      setFormData({
+        ...formData,
+        [e.target.name] : e.target.value, 
+      }
+      );
+      console.log(formData)
     };
 
 
@@ -46,8 +54,8 @@ export default function(){
            <label  className="align-baseline font-medium text-[#07074D] mx-20" >Job Name</label>
            <input
            type="text"
-             id="specificNumber"
-             name="specificNumber"
+             id="Jobname"
+             name="Jobname"
              value = {formData.Jobname}
              onChange={handleChange}
              className="border rounded w-17 px-2 py-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline align-baseline"
@@ -57,8 +65,8 @@ export default function(){
            <label  className="align-baseline font-medium text-[#07074D] ml-14 mr-12" >Skill Requirement</label>
            <input
            type="text"
-             id="specificNumber"
-             name="specificNumber"
+             id="Skillrequirement"
+             name="Skillrequirement"
              value = {formData.Skillrequirement}
              onChange={handleChange}
              className="border rounded w-17 px-2 py-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline align-baseline"
@@ -68,8 +76,8 @@ export default function(){
            <label  className="align-baseline font-medium text-[#07074D] ml-14 mr-10 pl-2" >Budget allotted</label>
            <input
            type="text"
-             id="specificNumber"
-             name="specificNumber"
+             id="budget"
+             name="budget"
              value = {formData.budget}
              onChange={handleChange}
              placeholder="Enter the value in INR"
@@ -80,8 +88,8 @@ export default function(){
            <label  className="align-baseline font-medium text-[#07074D] ml-9 mr-0 pr-10" >Max Workers Required</label>
            <input
            type="text"
-             id="specificNumber"
-             name="specificNumber"
+             id="max_workers"
+             name="max_workers"
              value = {formData.max_workers}
              onChange={handleChange}
              className="border rounded w-17 px-2 py-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline align-baseline"
@@ -92,8 +100,8 @@ export default function(){
            <label  className="align-baseline font-medium text-[#07074D] ml-9 mr-0 pr-10" >Min Workers Required</label>
            <input
            type="text"
-             id="specificNumber"
-             name="specificNumber"
+             id="min_workers"
+             name="min_workers"
              value = {formData.min_workers}
              onChange={handleChange}
              placeholder="Enter an Integer"
@@ -109,50 +117,50 @@ export default function(){
              onChange={handleChange}
              className="shadow appearance-none border rounded w-half py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           >
-          <div className="mt-4"></div>
+         
              <option value="online" className="text-green-500">Online</option>
              <option value="offline" className="text-red-500">Offline</option>
            </select>
            </div>
 
-           <div class="flex-wrap pt-8">
-                     <div class="mb-4">
+           <div className="flex-wrap pt-8">
+                     <div className="mb-4">
                        <label
-                         for="date"
-                         class="mb-3 block text-base font-medium text-[#07074D]"
+                         htmlFor="date"
+                         className="mb-3 block text-base font-medium text-[#07074D]"
                        >
                        Advertisement Date
                        </label>
                        <input
                          type="date"
-                         name="date"
-                         id="date"
+                         name="Ad_date"
+                         id="Ad_date"
                          value = {formData.Ad_date}
                          onChange={handleChange}
-                         class=" rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+                         className=" rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
                        />
                      </div>
                  </div>
-                 <div class="flex-wrap pt-4">
-                     <div class="mb-5">
+                 <div className="flex-wrap pt-4">
+                     <div className="mb-5">
                        <label
-                         for="date"
-                         class="mb-3 block text-base font-medium text-[#07074D]"
+                         htmlFor="dead_date"
+                         className="mb-3 block text-base font-medium text-[#07074D]"
                        >
                        Deadline Date
                        </label>
                        <input
                          type="date"
-                         name="date"
-                         id="date"
+                         name="dead_date"
+                         id="dead_date"
                          value = {formData.dead_date}
                          onChange={handleChange}
-                         class=" rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+                         className=" rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
                        />
                      </div>
                  </div>
                  
-                {formData.mode === "online" ? 
+                {formData.mode == "online" ? 
                 (<div className=""><button className="btn btn-primary rounded-md mr-10 mt-10" >Save</button>
                 <button  onClick ={handleClear} className="btn btn-primary rounded-md ml-10 mt-10">Clear Description</button></div>) : 
                 (<div className=""><button className="btn btn-primary rounded-md mr-10 mt-10" onClick={()=> navigate('/offline_mode_candi')}>Next</button> 
