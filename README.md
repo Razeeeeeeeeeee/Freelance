@@ -37,5 +37,6 @@ python manage.py runserver
 - [x] Add support for employer page
 - [x] Add support for employer manual entry
 - [x] Backend for file uploads
-- [ ] Add final admin page
+- [x] Add final admin page
+- [ ] Add support for data visualization in the admin page
 - [ ] Backend for the algorithm
