@@ -60,7 +60,7 @@ export default function(){
         <button className="btn btn-ghost m-5 px-3 py-2 rounded-lg" form="file_upload" onClick={handlesubmit}>Submit</button> 
     </div>
     <form id="file_upload">
-        <div className="flex justify-center mt-0 p-0"><input className="flex file-input w-full max-w-xs rounded-lg text-xs " id="f" type="file" onChange={ (evnt)=>{handleFileChange(evnt)} }></input></div>
+        <div className="flex justify-center mt-0 p-0"><input className="flex file-input w-full max-w-xs rounded-lg text-xs " id="employer_file" accept="xls, xlsx" type="file" onChange={ (evnt)=>{handleFileChange(evnt)} }></input></div>
     </form>
     <div className="pt-10 font-light text-gray-400 text-sm">If you want to enter the details manually, <Link className="underline text-zinc-900 " to="/employer_form">Click here!</Link> </div>
 
