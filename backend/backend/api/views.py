@@ -5,6 +5,9 @@ from rest_framework import status
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
+import pandas as pd
+import os
+from django.conf import settings
 
 from .serializers import CandidateFileUploadSerializer,EmployeeFileUploadSerializer
 class CandidateFileUploadAPIView(APIView):
@@ -45,3 +48,25 @@ class EmployeeFileUploadAPIView(APIView):
             serializer.errors,
             status=status.HTTP_400_BAD_REQUEST
         )
+    
+class RunSimulation(APIView):
+    
+    run = True
+    
+    def getfiles(dirpath):
+        a = [s for s in os.listdir(dirpath)
+            if os.path.isfile(os.path.join(dirpath, s))]
+        a.sort(key=lambda s: os.path.getmtime(os.path.join(dirpath, s)))
+        
+        if a:
+            return a[-1]
+        else: 
+            run = False
+            return None
+    
+    if (run):
+        employee_dir = os.path.join(settings.MEDIA_ROOT,'employee')
+        employee_file = pd.read_excel(os.path.join(employee_dir,getfiles(employee_dir)))
+        candidate_dir = os.path.join(settings.MEDIA_ROOT,'candidate')
+        employee_file = pd.read_excel(os.path.join(candidate_dir, getfiles(candidate_dir)))
+

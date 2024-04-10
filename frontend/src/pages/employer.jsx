@@ -23,7 +23,7 @@ export default function(){
         formdata.append("name",name)
 
         try{
-            const response = await axios.post("http://localhost:8000/api/candidate_upload/",formdata,{
+            const response = await axios.post("http://localhost:8000/api/employee_upload/",formdata,{
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 },
