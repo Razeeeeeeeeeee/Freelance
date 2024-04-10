@@ -8,8 +8,11 @@ from rest_framework.views import APIView
 import pandas as pd
 import os
 from django.conf import settings
+import random
+from django.http import JsonResponse
 
 from .serializers import CandidateFileUploadSerializer,EmployeeFileUploadSerializer
+
 class CandidateFileUploadAPIView(APIView):
     parser_classes = (MultiPartParser, FormParser)
     serializer_class = CandidateFileUploadSerializer
@@ -29,6 +32,8 @@ class CandidateFileUploadAPIView(APIView):
             serializer.errors,
             status=status.HTTP_400_BAD_REQUEST
         )
+    
+
 class EmployeeFileUploadAPIView(APIView):
     parser_classes = (MultiPartParser, FormParser)
     serializer_class = EmployeeFileUploadSerializer
@@ -69,4 +74,22 @@ class RunSimulation(APIView):
         employee_file = pd.read_excel(os.path.join(employee_dir,getfiles(employee_dir)))
         candidate_dir = os.path.join(settings.MEDIA_ROOT,'candidate')
         employee_file = pd.read_excel(os.path.join(candidate_dir, getfiles(candidate_dir)))
+
+
+    def matching_algo(self,dirpath1,dirpath2,request,*args,**kwargs):
+        candi_files = os.listdir(dirpath1)
+        emplo_files = os.listdir(dirpath2)
+
+        random.shuffle(candi_files)
+        random.shuffle(emplo_files)
+
+        matched_files = list(zip(emplo_files,candi_files))
+        
+        data = {'matched_files': matched_files}
+
+    # Send data as JSON response
+        return JsonResponse(data)
+        
+
+
 
