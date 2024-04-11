@@ -1,11 +1,32 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import axios from 'axios';
+
 
 
 
 export default function(){
 
+    const simulate = async (event)=>{
+        event.preventDefault();
 
+        try{
+            const response = await axios.get("http://localhost:8000/api/run_simulation/")
+            console.log(response.data);
+        }
+        catch(error){
+            if (error.response) { // get response with a status code not in range 2xx
+                console.log(error.response.data);
+                console.log(error.response.status);
+                console.log(error.response.headers);
+              } else if (error.request) { // no response
+                console.log(error.request);
+              } else { // Something wrong in setting up the request
+                console.log('Error', error.message);
+              }
+              console.log(error.config);
+        };
+        }
 
 
     return(
@@ -22,7 +43,7 @@ export default function(){
                     </div>
                     
                     <div className="pb-2 flex justify-center align-baseline">
-                        <input type="radio" name = "algo_type" id="skill"  className="radio" checked/>
+                        <input type="radio" name = "algo_type" id="skill"  className="radio" defaultChecked/>
                         <label htmlFor="skill" className="pl-10">Skill Based</label>
                      </div>
                      <div className="pb-5 flex justify-center align-baseline">   
@@ -30,7 +51,7 @@ export default function(){
                         <label htmlFor="skill" className="pl-10">Skill and Location Based</label>
                     </div>
                     <div className="pt-8 pb-10">
-                        <button className="btn btn-primary px-10 rounded-lg">Generate</button>
+                        <button className="btn btn-primary px-10 rounded-lg" onClick={simulate}>Generate</button>
                     </div>
 
                     <div className="font-bold pb-5 text-1xl underline">
@@ -41,8 +62,8 @@ export default function(){
                            <div className="pb-3">
                                 Skill Based
                            </div>
-                           <select class="select select-ghost rounded-md">
-                                <option disabled selected>Skill Based Algorithms</option>
+                           <select className="select select-ghost rounded-md" defaultValue={"Skill Based Algorithms"}>
+                                <option disabled >Skill Based Algorithms</option>
                                 <option>Han Solo</option>
                                 <option>Greedo</option>
                             </select>
@@ -51,8 +72,8 @@ export default function(){
                         <div className="col-span-3 col-start-4">
                            <div className="pb-3"> Skill Based</div>
                         
-                        <select class="select select-ghost rounded-md">
-                                <option disabled selected>Skill and Location Based Algorithms</option>
+                        <select className="select select-ghost rounded-md"  defaultValue={"Skill and Location Based Algorithms"}>
+                                <option disabled >Skill and Location Based Algorithms</option>
                                 <option>Han Solo</option>
                                 <option>Greedo</option>
                         </select>
