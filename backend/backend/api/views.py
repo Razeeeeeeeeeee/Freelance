@@ -56,9 +56,8 @@ class EmployeeFileUploadAPIView(APIView):
     
 class RunSimulation(APIView):
     
-    run = True
-    
-    def getfiles(dirpath):
+
+    def getfiles(self,dirpath):
         a = [s for s in os.listdir(dirpath)
             if os.path.isfile(os.path.join(dirpath, s))]
         a.sort(key=lambda s: os.path.getmtime(os.path.join(dirpath, s)))
@@ -69,27 +68,37 @@ class RunSimulation(APIView):
             run = False
             return None
     
-    if (run):
-        employee_dir = os.path.join(settings.MEDIA_ROOT,'employee')
-        employee_file = pd.read_excel(os.path.join(employee_dir,getfiles(employee_dir)))
-        candidate_dir = os.path.join(settings.MEDIA_ROOT,'candidate')
-        employee_file = pd.read_excel(os.path.join(candidate_dir, getfiles(candidate_dir)))
 
+    
+    def get(self, request, *args, **kwargs):
+       
+            employee_dir = os.path.join(settings.MEDIA_ROOT,'employee')
+            employee_file = pd.read_excel(os.path.join(employee_dir,self.getfiles(employee_dir)))
+            candidate_dir = os.path.join(settings.MEDIA_ROOT,'candidate')
+            candidate_file = pd.read_excel(os.path.join(candidate_dir,self.getfiles(candidate_dir)))
 
-    def matching_algo(self,dirpath1,dirpath2,request,*args,**kwargs):
-        candi_files = os.listdir(dirpath1)
-        emplo_files = os.listdir(dirpath2)
+            candidate_file = candidate_file.sample(frac=1)
+            employee_file = employee_file.sample(frac=1)
 
-        random.shuffle(candi_files)
-        random.shuffle(emplo_files)
+            min_size = min(len(candidate_file),len(employee_file))
 
-        matched_files = list(zip(emplo_files,candi_files))
-        
-        data = {'matched_files': matched_files}
+            candidate_file = candidate_file.iloc[:min_size]
+            candidate_file.reset_index(drop=True,inplace = True)
+            employee_file = employee_file.iloc[:min_size]
+            employee_file.reset_index(drop=True, inplace= True)
+            
+            candidate_file.columns = [column+'_candidate' for column in candidate_file.columns]
+            employee_file.columns = [column+'_employee' for column in employee_file.columns]
+            final_file = pd.concat([candidate_file,employee_file],axis =1 )
 
-    # Send data as JSON response
-        return JsonResponse(data)
-        
+            res = final_file.to_json()
+
+            return Response(
+               res,
+                status=status.HTTP_200_OK)
+
+       
+    
 
 
 
