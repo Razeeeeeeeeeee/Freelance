@@ -7,12 +7,19 @@ import axios from 'axios';
 
 export default function(){
 
-    const simulate = async (event)=>{
+    const simulate = (event)=>{
         event.preventDefault();
 
         try{
-            const response = await axios.get("http://localhost:8000/api/run_simulation/")
-            console.log(response.data);
+            axios.get("http://localhost:8000/api/run_simulation/",{responseType: 'blob'})
+                .then((response)=>{
+                    const url = window.URL.createObjectURL(new Blob([response.data]));
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.setAttribute('download', 'Generated_file.xlsx'); //or any other extension
+                    document.body.appendChild(link);
+                    link.click();
+                })
         }
         catch(error){
             if (error.response) { // get response with a status code not in range 2xx
