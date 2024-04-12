@@ -23,7 +23,29 @@ export default function(){
   
     const [formData, setFormData] = useState(initialFormData);
 
-
+    const subform = (event)=>{
+      axios.post(
+      "http://127.0.0.1:8000/user/employer/",
+      {
+        "Job_Name": formData.Jobname,
+        "Job_type":formData.mode,
+        "Skill_Requirement":formData.Skillrequirement,
+        "Budget_allocated":parseInt(formData.budget),
+        "Min_worker":formData.min_workers,
+        "Max_worker":formData.max_workers,
+        "Start_date":formData.Ad_date,
+        "End_date":formData.dead_date
+      }) 
+      .then((response)=>{
+        console.log(response)
+        alert("Saved Succesfully")
+        handleClear()
+        }
+      )
+      .catch((error) => {
+          console.log(error.message);
+        }
+      )}
     const handleClear = () => {
       console.log(formData)
       setFormData(initialFormData);
@@ -161,7 +183,7 @@ export default function(){
                  </div>
                  
                 {formData.mode == "online" ? 
-                (<div className=""><button className="btn btn-primary rounded-md mr-10 mt-10" >Save</button>
+                (<div className=""><button className="btn btn-primary rounded-md mr-10 mt-10" onClick={subform}>Save</button>
                 <button  onClick ={handleClear} className="btn btn-primary rounded-md ml-10 mt-10">Clear Description</button></div>) : 
                 (<div className=""><button className="btn btn-primary rounded-md mr-10 mt-10" onClick={()=> navigate('/employer_offline')}>Next</button> 
                 <button  onClick ={handleClear} className="btn btn-primary rounded-md ml-10 mt-10">Clear Description</button></div>

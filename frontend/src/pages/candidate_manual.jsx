@@ -1,31 +1,46 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function(){
     
     const navigate = useNavigate();
-
-
-  
-
     const initialFormData = {
       Jobname: '',
       Skillrequirement: '',
       budget: '',
-      max_workers: '',
-      min_workers: '',
       mode: 'offline',
       Ad_date: '',
       dead_date:'',
     };
-  
-  
+    
     const [formData, setFormData] = useState(initialFormData);
-
-
+    
+    const subform = (event)=>{
+      axios.post(
+      "http://127.0.0.1:8000/user/candidate/",
+      {
+        "Candi_name": formData.Jobname,
+        "mode":formData.mode,
+        "Skills":formData.Skillrequirement,
+        "Payment":parseInt(formData.budget),
+        "Start_date":formData.Ad_date,
+        "End_date":formData.dead_date
+      }) 
+      .then((response)=>{
+        console.log(response)
+        alert("Saved Succesfully")
+        handleClear()
+        }
+      )
+      .catch((error) => {
+      
+          console.log(error.message);
+        }
+      )}
+    
     const handleClear = () => {
-      console.log(formData)
       setFormData(initialFormData);
     };
 
@@ -138,7 +153,7 @@ export default function(){
                  </div>
                  
                 {formData.mode == "online" ? 
-                (<div className=""><button className="btn btn-primary rounded-md mr-10 mt-10" >Save</button>
+                (<div className=""><button className="btn btn-primary rounded-md mr-10 mt-10" onClick={subform}>Save</button>
                 <button  onClick ={handleClear} className="btn btn-primary rounded-md ml-10 mt-10">Clear Description</button></div>) : 
                 (<div className=""><button className="btn btn-primary rounded-md mr-10 mt-10" onClick={()=> navigate('/offlline_mode_candi')}>Next</button> 
                 <button  onClick ={handleClear} className="btn btn-primary rounded-md ml-10 mt-10">Clear Description</button></div>
