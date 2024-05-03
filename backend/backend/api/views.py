@@ -1,5 +1,6 @@
 from django.shortcuts import render
-
+from django.core.files import File
+from django.http import HttpResponse
 # Create your views here.
 from rest_framework import status
 from rest_framework.parsers import FormParser, MultiPartParser
@@ -80,7 +81,8 @@ class RunSimulation(APIView):
             candidate_file = candidate_file.sample(frac=1)
             employee_file = employee_file.sample(frac=1)
 
-            min_size = min(len(candidate_file),len(employee_file))
+            # min_size = min(len(candidate_file),len(employee_file))
+            min_size = 10
 
             candidate_file = candidate_file.iloc[:min_size]
             candidate_file.reset_index(drop=True,inplace = True)
@@ -91,12 +93,23 @@ class RunSimulation(APIView):
             employee_file.columns = [column+'_employee' for column in employee_file.columns]
             final_file = pd.concat([candidate_file,employee_file],axis =1 )
 
-            res = final_file.to_json()
+            # To be done for enabling the data visualisation
+            # res = final_file.to_json(orient='records')
 
-            return Response(
-               res,
-                status=status.HTTP_200_OK)
+            processed_dir = os.path.join(settings.MEDIA_ROOT,'processed')
+            if not os.path.exists(processed_dir):
+                os.makedirs(processed_dir)
+            
+            file_path = os.path.join(processed_dir,'processed_file.xlsx')
+            final_file.to_excel(file_path)
 
+            ff = open(file_path,'rb')
+
+            f = File(ff)
+            res = HttpResponse(f.read())
+            res['Content-Disposition'] = 'attachment';
+
+            return res
        
     
 
