@@ -16,8 +16,11 @@ export default function(){
     };
     
     const [formData, setFormData] = useState(initialFormData);
+    const [preferences, setPreferences] = useState(['', '', '', '']);
+
     
     const subform = (event)=>{
+      console.log("Preferences",preferences);
       axios.post(
       "http://127.0.0.1:8000/user/candidate/",
       {
@@ -26,7 +29,8 @@ export default function(){
         "Skills":formData.Skillrequirement,
         "Payment":parseInt(formData.budget),
         "Start_date":formData.Ad_date,
-        "End_date":formData.dead_date
+        "End_date":formData.dead_date,
+        // "Preferences": preferences
       }) 
       .then((response)=>{
         console.log(response)
@@ -42,6 +46,7 @@ export default function(){
     
     const handleClear = () => {
       setFormData(initialFormData);
+      setPreferences(['','','','']);
     };
 
     const handleChange = (e) => {
@@ -53,6 +58,11 @@ export default function(){
       console.log(formData)
     };
 
+    const handlePreferenceChange = (e, index) => {
+      const updatedPreferences = [...preferences];
+      updatedPreferences[index] = e.target.value;
+      setPreferences(updatedPreferences);
+    };
 
 
     return(
@@ -152,6 +162,28 @@ export default function(){
                      </div>
                  </div>
                  
+                 <div className="mb-4">
+                    <label htmlFor="preferenceSelect" className="block text-gray-700 text-sm font-bold mb-2">
+                                        Select Preference Order
+                    </label>
+            
+               {preferences.map((preference, index) => (
+            <select
+              key={index}
+              value={preference}
+              onChange={(e) => handlePreferenceChange(e, index)}
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-2"
+            >
+              <option value="">Select...</option>
+              <option value="FrontEnd">Frontend</option>
+              <option value="Backend">Backend</option>
+              <option value="Fullstack">Full Stack</option>
+              <option value="Aiml">AI/ML</option>
+            </select>
+            
+          ))}
+        </div>
+
                 {formData.mode == "online" ? 
                 (<div className=""><button className="btn btn-primary rounded-md mr-10 mt-10" onClick={subform}>Save</button>
                 <button  onClick ={handleClear} className="btn btn-primary rounded-md ml-10 mt-10">Clear Description</button></div>) : 

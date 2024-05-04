@@ -28,3 +28,8 @@ class Candidate(models.Model):
     Payment = models.IntegerField(null = True)
     Start_date = models.DateField()
     End_date = models.DateField()
+    #references = models.CharField(max_length=300,default = ["","","",""])
+
+
+   # def get_preference_list(self):
+    #    return self.Preferences.split(',')
