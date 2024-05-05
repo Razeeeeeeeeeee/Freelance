@@ -17,10 +17,10 @@ export default function(){
     
     const [formData, setFormData] = useState(initialFormData);
     const [preferences, setPreferences] = useState(['', '', '', '']);
-
     
     const subform = (event)=>{
       console.log("Preferences",preferences);
+      const preference_string = preferences.join(',');
       axios.post(
       "http://127.0.0.1:8000/user/candidate/",
       {
@@ -30,10 +30,10 @@ export default function(){
         "Payment":parseInt(formData.budget),
         "Start_date":formData.Ad_date,
         "End_date":formData.dead_date,
-        // "Preferences": preferences
+        "Preferences": preference_string
       }) 
       .then((response)=>{
-        console.log(response)
+        console.log(response.data)
         alert("Saved Succesfully")
         handleClear()
         }

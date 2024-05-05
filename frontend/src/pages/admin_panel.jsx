@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from 'axios';
-
+import Graph from '../components/BarChart';
 
 
 
@@ -35,6 +35,40 @@ export default function(){
         };
         }
 
+        const [label,setlabel] = useState([]);
+        const [data,setdata] = useState([]);
+        const [datafetch, setdatafetch] = useState(false);
+        const [graph,setgraph] = useState([['A','B','C','D'],[10,23,20,34]]);
+        
+
+        const simulate1 = (event) =>{
+            event.preventDefault();
+            try{
+                axios.get("http://localhost:8000/user/candidate/")
+                    .then((response)=>{
+                       console.log(response.data)
+                        setgraph(response.data);
+                        setlabel(graph[0]);
+                        setdata(graph[1]);
+                        setdatafetch(true)
+                    })
+            }
+            catch(error){
+                if (error.response) { // get response with a status code not in range 2xx
+                    console.log(error.response.data);
+                    console.log(error.response.status);
+                    console.log(error.response.headers);
+                  } else if (error.request) { // no response
+                    console.log(error.request);
+                  } else { // Something wrong in setting up the request
+                    console.log('Error', error.message);
+                  }
+                  console.log(error.config);
+            };
+           
+            }
+
+            
 
     return(
         <>
@@ -58,8 +92,10 @@ export default function(){
                         <label htmlFor="skill" className="pl-10">Skill and Location Based</label>
                     </div>
                     <div className="pt-8 pb-10">
-                        <button className="btn btn-primary px-10 rounded-lg" onClick={simulate}>Generate</button>
+                        <button className="btn btn-primary px-10 rounded-lg" onClick={simulate1} >Generate</button>
                     </div>
+
+                {datafetch ? ( <div><h3>Bar Graph</h3> <Graph data={graph} /></div>):(<div></div>)}  
 
                     <div className="font-bold pb-5 text-1xl underline">
                         Matching Automation
