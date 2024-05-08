@@ -1,132 +1,54 @@
 import React, { useState, useEffect } from 'react';
-import Card from '../components/card'
 import { useNavigate } from "react-router-dom";
+
 
 
 export default function(){
 
-    const [coordinates, setCoordinates] = useState(null);
+ // Import useHistory from React Router
+    const navigate = useNavigate();
+  
+    const [seconds, setSeconds] = useState(5); // Initial countdown time in seconds
 
-  const getlocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          setCoordinates({ latitude, longitude });
-        },
-        (error) => {
-          console.error('Error getting geolocation:', error);
+    useEffect(() => {
+        const countdownInterval = setInterval(() => {
+            setSeconds((prevSeconds) => prevSeconds - 1); // Decrease seconds by 1 every second
+        }, 1000); // 1000 milliseconds = 1 second
+
+        return () => clearInterval(countdownInterval); // Clean up the interval on unmount
+    }, []);
+
+    useEffect(() => {
+        if (seconds === 0) {
+            // Redirect to the desired page when the countdown reaches 0
+            navigate('/admin_panel') // Replace '/destination' with the actual path
         }
-      );
-    } else {
-      console.error('Geolocation is not supported by this browser.');
-    }
-  };
-    
+    }, [seconds, history]);
+
     
 return(
 
-    <div className="flex flex-col pt-32 justify-center px-0 pb-20">
+    <div className="flex  flex-row pt-32 justify-center px-0 pb-20">
     <div className="grid grid-flow-col grid-cols-11">
       <div className="sm:border-solid sm:border-2 rounded-md py-10 px-0 mr-10 drop-shadow-lg grid col-span-5 col-start-4">
-        <div className="font-bold pb-10 text-3xl">
-          Job Location
+      <div>
+           <h1 style={{ color: 'green', fontStyle: 'italic', fontFamily: 'Covered By Your Grace',fontSize: '30px' }}>
+                Success Submitted
+            </h1>
+            </div>
+            <div className="font-semibold pt-3 pb-5 text-3xl">
+              Congratulations
+              </div>
+
+         <div className="font-normal pb-10 mt-7 text-2xl">
+           Your request has been successfully submitted to us. We will validate your information and reach out to you shortly with updates
           </div>
 
-       
+          <div className='font-normal pt-10 mt-7 text-1xl'> Redirecting you to Homepage after {seconds} seconds</div>
 
-   <div className="">
-      <div className="flex justify-center mx-20 mb-5">
-       <label  className="align-baseline font-medium text-[#07074D] mx-20" >Building No</label>
-       <input
-       type="text"
-         id="Building No"
-         name="Building No"
-         className="border rounded w-17 px-2 py-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline align-baseline"
-       />
-       </div>
-       </div>
-
-       <div className="">
-      <div className="flex justify-center mx-20 mb-5">
-       <label  className="align-baseline font-medium text-[#07074D] mx-20" >Street No    </label>
-       <input
-       type="text"
-         id="street"
-         name="street"
-         className="border rounded w-17 px-2 py-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline align-baseline"
-       />
-       </div>
-       </div>
-
-       <div className="">
-      <div className="flex justify-center mx-20 mb-5">
-       <label  className="align-baseline font-medium text-[#07074D] mx-14 ml-16" >City</label>
-       <input
-       type="text"
-         id="city"
-         name="city"
-         className="border rounded w-17 px-2 py-1 ml-14 text-gray-700 leading-tight focus:outline-none focus:shadow-outline align-baseline"
-       />
-       </div>
-       </div>
-
-       <div className="">
-      <div className="flex justify-center mx-20 mb-5">
-       <label  className="align-baseline font-medium text-[#07074D] mx-20" >Country</label>
-       <input
-       type="text"
-         id="country"
-         name="country"
-         className="border rounded w-17 px-2 py-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline align-baseline"
-       />
-       </div>
-            </div>
-
-         <div className="font-semibold pb-10 mt-7 text-2xl">
-          OR
-          </div>
-
-            <div>
-          <button onClick = {getlocation} className="btn btn-ghost mb-16 px-3 py-2 rounded-lg font-semibold ">Pick up current location</button>
-
-          {coordinates && (
-        <div>
-          <div className="">
-      <div className="flex justify-center mx-20 mb-5">
-       <label  className="align-baseline font-medium text-[#07074D] mx-20" >Latitude</label>
-       <input
-       type="decimal"
-         id="country"
-         name="country"
-         value = {coordinates.latitude}
-         className="border rounded w-17 px-2 py-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline align-baseline"
-       />
-       </div>
-            </div>
-
-            <div className="">
-      <div className="flex justify-center mx-20 mb-5">
-       <label  className="align-baseline font-medium text-[#07074D] mx-20" >Longitude</label>
-       <input
-       type="decimal"
-         id="country"
-         name="country"
-         value = {coordinates.longitude}
-         className="border rounded w-17 px-2 py-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline align-baseline"
-       />
-       </div>
-            </div>
-        </div>
-        
-      )}
-            </div>
-            
          
-     <div> <button className="btn btn-primary rounded-md mr-10 mt-10 ml-4 mb-11">Save</button></div>
- 
-        
     </div>
+
  </div>
 </div>
     
