@@ -75,30 +75,30 @@ export default function(){
 
       
        
-          <div className="flex justify-center ml-20 mr-10 mb-5">
-           <label  className="align-baseline font-medium text-[#07074D] ml-10 mr-10" >Candidate Name</label>
+          <div className="flex ml-20 mr-10 mb-5 justify-between">
+           <label  className="align-baseline font-medium text-[#07074D]" >Candidate Name</label>
            <input
            type="text"
              id="Jobname"
              name="Jobname"
              value = {formData.Jobname}
              onChange={handleChange}
-             className="border rounded w-17 py-1 pl-8 mr-10 ml-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline align-baseline"
+             className="border rounded text-gray-700 align-baseline pl-2 "
            />
            </div>
-           <div className="flex justify-center ml-20 mr-10 mb-5">
-           <label  className="align-baseline font-medium text-[#07074D] ml-14 mr-20" >Skills</label>
+           <div className="flex ml-20 mr-10 mb-5 justify-between">
+           <label  className="align-baseline font-medium text-[#07074D]" >Skills</label>
            <input
            type="text"
              id="Skillrequirement"
              name="Skillrequirement"
              value = {formData.Skillrequirement}
              onChange={handleChange}
-             className="border rounded w-17 pr-0 mr-0 py-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline align-baseline"
+             className="border rounded text-gray-700 align-baseline pl-2"
            />
            </div>
-           <div className="flex justify-center mx-20 mb-5">
-           <label  className="align-baseline font-medium text-[#07074D] ml-14 mr-10 pl-2" >Desired Salary</label>
+           <div className="flex ml-20 mr-10 mb-5 justify-between">
+           <label  className="align-baseline font-medium text-[#07074D]" >Desired Salary</label>
            <input
            type="text"
              id="budget"
@@ -106,7 +106,7 @@ export default function(){
              value = {formData.budget}
              onChange={handleChange}
              placeholder="Enter the value in INR"
-             className="border rounded w-17 px-2 py-1 ml-5 text-gray-700 leading-tight focus:outline-none focus:shadow-outline align-baseline"
+             className="border rounded w-17 text-gray-700 align-baseline pl-2"
            />
            </div>
 
@@ -161,9 +161,9 @@ export default function(){
                        />
                      </div>
                  </div>
-                 
-                 <div className="mb-4">
-                    <label htmlFor="preferenceSelect" className="block text-gray-700 text-sm font-bold mb-2">
+                 <div className="flex justify-center">
+                 <div className="mb-4 flex flex-col">
+                    <label htmlFor="preferenceSelect" className="block text-gray-700 text-sm font-bold mb-4">
                                         Select Preference Order
                     </label>
             
@@ -172,7 +172,7 @@ export default function(){
               key={index}
               value={preference}
               onChange={(e) => handlePreferenceChange(e, index)}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-2"
+              className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-2"
             >
               <option value="">Select...</option>
               <option value="FrontEnd">Frontend</option>
@@ -182,6 +182,7 @@ export default function(){
             </select>
             
           ))}
+        </div>
         </div>
 
                 {formData.mode == "online" ? 
