@@ -34,6 +34,7 @@ export default function(){
             
             catch(error) {
                 if (error.response) { // get response with a status code not in range 2xx
+                    alert(error.response.data);
                     console.log(error.response.data);
                     console.log(error.response.status);
                     console.log(error.response.headers);

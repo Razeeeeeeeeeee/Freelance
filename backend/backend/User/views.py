@@ -28,7 +28,7 @@ class Candidate_view(APIView):
 
     def get(self,request):
         preferences = [tasks.Preferences for tasks in Candidate.objects.all()]
-        output  = Candidate_view.simulation(preferences)
+        output  = self.simulation(preferences)
         return Response(output)
     
     def simulation(preferences):

@@ -17,17 +17,28 @@ from .serializers import CandidateFileUploadSerializer,EmployeeFileUploadSeriali
 class CandidateFileUploadAPIView(APIView):
     parser_classes = (MultiPartParser, FormParser)
     serializer_class = CandidateFileUploadSerializer
+    required_columns = ['candidate name','skills','desired salary','mode','available from','available till','preference 1','preference 2','preference 3']
     
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             # you can access the file like this from serializer
             # uploaded_file = serializer.validated_data["file"]
-            serializer.save()
-            return Response(
-                serializer.data,
-                status=status.HTTP_201_CREATED
-            )
+            df = pd.read_excel(serializer.validated_data["file"])
+            actual_columns = [str(x).lower() for x in df.columns.tolist() ]
+            missing_columns = [col for col in self.required_columns if col not in actual_columns]
+
+            if missing_columns:
+                return Response(
+                    "Some of the required columns are missing",
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            else:
+                serializer.save()
+                return Response(
+                    serializer.data,
+                    status=status.HTTP_201_CREATED
+                )
         
         return Response(
             serializer.errors,
@@ -38,17 +49,28 @@ class CandidateFileUploadAPIView(APIView):
 class EmployeeFileUploadAPIView(APIView):
     parser_classes = (MultiPartParser, FormParser)
     serializer_class = EmployeeFileUploadSerializer
-    
+    required_columns = ['job name','requirements','budget','max workers','min workers','mode','available from','available till']
+
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             # you can access the file like this from serializer
             # uploaded_file = serializer.validated_data["file"]
-            serializer.save()
-            return Response(
-                serializer.data,
-                status=status.HTTP_201_CREATED
-            )
+            df = pd.read_excel(serializer.validated_data["file"])
+            actual_columns = [str(x).lower() for x in df.columns.tolist() ]
+            missing_columns = [col for col in self.required_columns if col not in actual_columns]
+            
+            if missing_columns:
+                return Response(
+                    "Some of the required columns are missing",
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            else:
+                serializer.save()
+                return Response(
+                    serializer.data,
+                    status=status.HTTP_201_CREATED
+                )
         
         return Response(
             serializer.errors,
@@ -71,46 +93,53 @@ class RunSimulation(APIView):
     
 
     
-    def get(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
        
-            employee_dir = os.path.join(settings.MEDIA_ROOT,'employee')
-            employee_file = pd.read_excel(os.path.join(employee_dir,self.getfiles(employee_dir)))
-            candidate_dir = os.path.join(settings.MEDIA_ROOT,'candidate')
-            candidate_file = pd.read_excel(os.path.join(candidate_dir,self.getfiles(candidate_dir)))
+            # employee_dir = os.path.join(settings.MEDIA_ROOT,'employee')
+            # employee_file = pd.read_excel(os.path.join(employee_dir,self.getfiles(employee_dir)))
+            # candidate_dir = os.path.join(settings.MEDIA_ROOT,'candidate')
+            # candidate_file = pd.read_excel(os.path.join(candidate_dir,self.getfiles(candidate_dir)))
 
-            candidate_file = candidate_file.sample(frac=1)
-            employee_file = employee_file.sample(frac=1)
+            # candidate_file = candidate_file.sample(frac=1)
+            # employee_file = employee_file.sample(frac=1)
 
-            # min_size = min(len(candidate_file),len(employee_file))
-            min_size = 10
+            # # min_size = min(len(candidate_file),len(employee_file))
+            # min_size = 10
 
-            candidate_file = candidate_file.iloc[:min_size]
-            candidate_file.reset_index(drop=True,inplace = True)
-            employee_file = employee_file.iloc[:min_size]
-            employee_file.reset_index(drop=True, inplace= True)
+            # candidate_file = candidate_file.iloc[:min_size]
+            # candidate_file.reset_index(drop=True,inplace = True)
+            # employee_file = employee_file.iloc[:min_size]
+            # employee_file.reset_index(drop=True, inplace= True)
             
-            candidate_file.columns = [column+'_candidate' for column in candidate_file.columns]
-            employee_file.columns = [column+'_employee' for column in employee_file.columns]
-            final_file = pd.concat([candidate_file,employee_file],axis =1 )
+            # if(request.method == "gale-shapely"):
+            print(request.data["method"])
+                
 
-            # To be done for enabling the data visualisation
-            # res = final_file.to_json(orient='records')
+            # candidate_file.columns = [column+'_candidate' for column in candidate_file.columns]
+            # employee_file.columns = [column+'_employee' for column in employee_file.columns]
+            # final_file = pd.concat([candidate_file,employee_file],axis =1 )
 
-            processed_dir = os.path.join(settings.MEDIA_ROOT,'processed')
-            if not os.path.exists(processed_dir):
-                os.makedirs(processed_dir)
+            # # To be done for enabling the data visualisation
+            # # res = final_file.to_json(orient='records')
+
+            # processed_dir = os.path.join(settings.MEDIA_ROOT,'processed')
+            # if not os.path.exists(processed_dir):
+            #     os.makedirs(processed_dir)
             
-            file_path = os.path.join(processed_dir,'processed_file.xlsx')
-            final_file.to_excel(file_path)
+            # file_path = os.path.join(processed_dir,'processed_file.xlsx')
+            # final_file.to_excel(file_path)
 
-            ff = open(file_path,'rb')
+            # ff = open(file_path,'rb')
 
-            f = File(ff)
-            res = HttpResponse(f.read())
-            res['Content-Disposition'] = 'attachment';
+            # f = File(ff)
+            # res = HttpResponse(f.read())
+            # res['Content-Disposition'] = 'attachment'
 
-            return res
-       
+            # return res
+            return Response(
+            "hello",
+            status=status.HTTP_200_OK
+        )
     
 
 
