@@ -20,6 +20,7 @@ from .serializers import (
     CandidateEntrySerializer,
     EmployeeEntrySerializer,
 )
+from .algorithms import gale_shapely
 
 
 class CandidateFileUploadAPIView(APIView):
@@ -104,6 +105,7 @@ class manualCandidateFileUpload(APIView):
         serializer = CandidateEntrySerializer(data=data)
         if serializer.is_valid():
             print(serializer.validated_data)
+            serializer.save()
             return Response(serializer.validated_data, status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -115,6 +117,7 @@ class manualEmployeeFileUpload(APIView):
         data = JSONParser().parse(request)
         serializer = EmployeeEntrySerializer(data=data)
         if serializer.is_valid():
+            serializer.save()
             print(serializer.validated_data)
             return Response(serializer.validated_data, status.HTTP_200_OK)
         else:

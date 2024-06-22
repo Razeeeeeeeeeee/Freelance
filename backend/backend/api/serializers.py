@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import EmployeeUploadedFile, CandidateUploadedFile
+from .models import EmployeeUploadedFile, CandidateUploadedFile, Employee, Candidate
 
 mode_choices = (("online", "online"), ("offline", "offline"))
 
@@ -22,24 +22,13 @@ class CandidateFileUploadSerializer(serializers.ModelSerializer):
         )
 
 
-class CandidateEntrySerializer(serializers.Serializer):
-    name = serializers.CharField(max_length=200)
-    skill = serializers.CharField(max_length=200)
-    salary = serializers.IntegerField()
-    mode = serializers.ChoiceField(choices=mode_choices)
-    available_from = serializers.DateField()
-    available_to = serializers.DateField()
-    preference1 = serializers.CharField(max_length=200)
-    preference2 = serializers.CharField(max_length=200)
-    preference3 = serializers.CharField(max_length=200)
+class CandidateEntrySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Candidate
+        fields = "__all__"
 
 
 class EmployeeEntrySerializer(serializers.Serializer):
-    name = serializers.CharField(max_length=200)
-    requirement = serializers.CharField(max_length=200)
-    budget = serializers.IntegerField()
-    mode = serializers.ChoiceField(choices=mode_choices)
-    available_from = serializers.DateField()
-    available_to = serializers.DateField()
-    min_worker = serializers.IntegerField()
-    max_worker = serializers.IntegerField()
+    class Meta:
+        model = Employee
+        fields = "__all__"
