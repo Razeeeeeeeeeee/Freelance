@@ -20,7 +20,8 @@ from .serializers import (
     CandidateEntrySerializer,
     EmployeeEntrySerializer,
 )
-from .algorithms import gale_shapely
+
+# from .algorithms import gale_shapely
 
 
 class CandidateFileUploadAPIView(APIView):
@@ -99,10 +100,10 @@ class EmployeeFileUploadAPIView(APIView):
 
 
 class manualCandidateFileUpload(APIView):
-    @csrf_exempt
+    serializer_class = CandidateEntrySerializer
+
     def post(self, request):
-        data = JSONParser().parse(request)
-        serializer = CandidateEntrySerializer(data=data)
+        serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             print(serializer.validated_data)
             serializer.save()
@@ -112,10 +113,10 @@ class manualCandidateFileUpload(APIView):
 
 
 class manualEmployeeFileUpload(APIView):
-    @csrf_exempt
+    serializer_class = EmployeeEntrySerializer
+
     def post(self, request):
-        data = JSONParser().parse(request)
-        serializer = EmployeeEntrySerializer(data=data)
+        serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             serializer.save()
             print(serializer.validated_data)
