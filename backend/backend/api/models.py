@@ -3,7 +3,7 @@ from django.db import models
 
 # Create your models here.
 class EmployeeUploadedFile(models.Model):
-    file = models.FileField(upload_to="employee/")
+    file = models.FileField(upload_to="employer/")
     uploaded_on = models.DateTimeField(auto_now_add=True)
     name = models.CharField(max_length=100)
 

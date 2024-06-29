@@ -1,3 +1,4 @@
+from api.models import Employee
 from django.shortcuts import render
 from django.core.files import File
 from django.http import HttpResponse
@@ -21,7 +22,7 @@ from .serializers import (
     EmployeeEntrySerializer,
 )
 
-# from .algorithms import gale_shapely
+from .algorithms import gale_shapely
 
 
 class CandidateFileUploadAPIView(APIView):
@@ -105,8 +106,8 @@ class manualCandidateFileUpload(APIView):
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
-            print(serializer.validated_data)
             serializer.save()
+            print(serializer.validated_data)
             return Response(serializer.validated_data, status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -138,25 +139,51 @@ class RunSimulation(APIView):
             return None
 
     def post(self, request, *args, **kwargs):
+        employer_dir = os.path.join(settings.MEDIA_ROOT, "employer")
+        employer_file = pd.read_excel(
+            os.path.join(employer_dir, self.getfiles(employer_dir))
+        )
+        candidate_dir = os.path.join(settings.MEDIA_ROOT, "candidate")
+        candidate_file = pd.read_excel(
+            os.path.join(candidate_dir, self.getfiles(candidate_dir))
+        )
+        # min_size = min(len(candidate_file),len(employee_file))
 
-        # employee_dir = os.path.join(settings.MEDIA_ROOT,'employee')
-        # employee_file = pd.read_excel(os.path.join(employee_dir,self.getfiles(employee_dir)))
-        # candidate_dir = os.path.join(settings.MEDIA_ROOT,'candidate')
-        # candidate_file = pd.read_excel(os.path.join(candidate_dir,self.getfiles(candidate_dir)))
+        if request.data["method"] == "gale-shapely":
+            Employees = []
+            for _, row in candidate_file.iterrows():
+                Employees.append(
+                    gale_shapely.Employee(
+                        row["candidate name"],
+                        row["skills"].split(","),
+                        [row["available from"], row["available till"]],
+                        [row["preference 1"], row["preference 2"], row["preference 3"]],
+                    )
+                )
+            Employers = []
+            for _, row in employer_file.iterrows():
+                Employers.append(
+                    gale_shapely.Employer(
+                        row["job name"],
+                        row["requirements"],
+                        [row["available from"], row["available till"]],
+                    )
+                )
 
-        # candidate_file = candidate_file.sample(frac=1)
-        # employee_file = employee_file.sample(frac=1)
+            results = gale_shapely.gale_shapley_matching(Employers, Employees)
+            print(results)
+            return Response(results, status=status.HTTP_200_OK)
+            # print(request.data["method"])
 
-        # # min_size = min(len(candidate_file),len(employee_file))
-        # min_size = 10
+            # elif request.data["method"] == "random":
+            # candidate_file = candidate_file.sample(frac=1)
+            # employee_file = employee_file.sample(frac=1)
+            # min_size = 10
 
         # candidate_file = candidate_file.iloc[:min_size]
         # candidate_file.reset_index(drop=True,inplace = True)
         # employee_file = employee_file.iloc[:min_size]
         # employee_file.reset_index(drop=True, inplace= True)
-
-        # if(request.method == "gale-shapely"):
-        print(request.data["method"])
 
         # candidate_file.columns = [column+'_candidate' for column in candidate_file.columns]
         # employee_file.columns = [column+'_employee' for column in employee_file.columns]
@@ -179,4 +206,4 @@ class RunSimulation(APIView):
         # res['Content-Disposition'] = 'attachment'
 
         # return res
-        return Response("hello", status=status.HTTP_200_OK)
+        return Response([], status=status.HTTP_200_OK)
