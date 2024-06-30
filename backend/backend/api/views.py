@@ -149,7 +149,15 @@ class RunSimulation(APIView):
             run = False
             return None
 
-    def getHappinessScore(self, results, Employees):
+    def getHappinessScore(self, results):
+        """
+        function to find the happiness score from the results
+        Args :
+            results (key-value pair) : the result of the matching algorithms
+
+        Returns :
+            happiness score as a key value pair
+        """
         happiness = {
             33: 0,
             67: 0,
@@ -199,7 +207,7 @@ class RunSimulation(APIView):
 
             results = gale_shapely.gale_shapley_matching(Employers, Employees)
             print(results)
-            happiness = self.getHappinessScore(results, Employees)
+            happiness = self.getHappinessScore(results)
             score = [list(happiness.keys()), list(happiness.values())]
             print(score)
             response = {
