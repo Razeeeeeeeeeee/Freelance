@@ -38,7 +38,6 @@ export default function () {
     }
   };
 
-  const [label, setlabel] = useState([]);
   const [data, setdata] = useState([]);
   const [datafetch, setdatafetch] = useState(false);
   const [graph, setgraph] = useState([
@@ -55,10 +54,10 @@ export default function () {
       axios
         .post("http://localhost:8000/api/run_simulation/", { method: Algo })
         .then((response) => {
-          console.log(response.data);
-          setgraph(response.data);
-          setlabel(graph[0]);
-          setdata(graph[1]);
+          const resp = JSON.parse(response.data);
+          console.log(resp.results);
+          setgraph(resp.happiness);
+          setdata(resp.results);
           setdatafetch(true);
         });
     } catch (error) {
@@ -183,7 +182,7 @@ export default function () {
                 <div className="p-3"> Results </div>
                 <div className="flex justify-center">
                   <div className="w-3/4">
-                    <Table data={graph}></Table>
+                    <Table data={data}></Table>
                   </div>
                 </div>
               </div>

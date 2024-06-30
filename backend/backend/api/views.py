@@ -21,7 +21,7 @@ from .serializers import (
     CandidateEntrySerializer,
     EmployeeEntrySerializer,
 )
-
+import json
 from .algorithms import gale_shapely
 
 
@@ -128,6 +128,17 @@ class manualEmployeeFileUpload(APIView):
 
 class RunSimulation(APIView):
 
+    def __init__(self) -> None:
+        super().__init__()
+        self.employer_dir = os.path.join(settings.MEDIA_ROOT, "employer")
+        self.employer_file = pd.read_excel(
+            os.path.join(self.employer_dir, self.getfiles(self.employer_dir))
+        )
+        self.candidate_dir = os.path.join(settings.MEDIA_ROOT, "candidate")
+        self.candidate_file = pd.read_excel(
+            os.path.join(self.candidate_dir, self.getfiles(self.candidate_dir))
+        )
+
     def getfiles(self, dirpath):
         a = [s for s in os.listdir(dirpath) if os.path.isfile(os.path.join(dirpath, s))]
         a.sort(key=lambda s: os.path.getmtime(os.path.join(dirpath, s)))
@@ -138,20 +149,36 @@ class RunSimulation(APIView):
             run = False
             return None
 
+    def getHappinessScore(self, results, Employees):
+        happiness = {
+            33: 0,
+            67: 0,
+            100: 0,
+        }
+
+        df = self.candidate_file
+        df2 = self.employer_file
+        for result in results:
+            emp = result[1]
+            jobassigned = result[0]
+            index2 = df2.index[df2["job name"] == jobassigned].tolist()
+            index = df.index[df["candidate name"] == emp].tolist()
+            reqs = df2.loc[index2, "requirements"].tolist()[0].strip().lower()
+            if df.loc[index, "preference 1"].tolist()[0].strip().lower() == reqs:
+                happiness[100] += 1
+            elif df.loc[index, "preference 2"].tolist()[0].strip().lower() == reqs:
+                happiness[67] += 1
+            else:
+                happiness[33] += 1
+
+        return happiness
+
     def post(self, request, *args, **kwargs):
-        employer_dir = os.path.join(settings.MEDIA_ROOT, "employer")
-        employer_file = pd.read_excel(
-            os.path.join(employer_dir, self.getfiles(employer_dir))
-        )
-        candidate_dir = os.path.join(settings.MEDIA_ROOT, "candidate")
-        candidate_file = pd.read_excel(
-            os.path.join(candidate_dir, self.getfiles(candidate_dir))
-        )
         # min_size = min(len(candidate_file),len(employee_file))
 
         if request.data["method"] == "gale-shapely":
             Employees = []
-            for _, row in candidate_file.iterrows():
+            for _, row in self.candidate_file.iterrows():
                 Employees.append(
                     gale_shapely.Employee(
                         row["candidate name"],
@@ -161,7 +188,7 @@ class RunSimulation(APIView):
                     )
                 )
             Employers = []
-            for _, row in employer_file.iterrows():
+            for _, row in self.employer_file.iterrows():
                 Employers.append(
                     gale_shapely.Employer(
                         row["job name"],
@@ -172,7 +199,14 @@ class RunSimulation(APIView):
 
             results = gale_shapely.gale_shapley_matching(Employers, Employees)
             print(results)
-            return Response(results, status=status.HTTP_200_OK)
+            happiness = self.getHappinessScore(results, Employees)
+            score = [list(happiness.keys()), list(happiness.values())]
+            print(score)
+            response = {
+                "results": results,
+                "happiness": score,
+            }
+            return Response(json.dumps(response), status=status.HTTP_200_OK)
             # print(request.data["method"])
 
             # elif request.data["method"] == "random":
