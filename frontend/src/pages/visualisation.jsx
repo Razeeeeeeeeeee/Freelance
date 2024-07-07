@@ -38,7 +38,8 @@ export default function() {
       console.log(error.config);
     }
   };
-
+  
+  const [alert, setAlert] = useState(null);
   const [data, setdata] = useState([]);
   const [datafetch, setdatafetch] = useState(false);
   const [graph, setgraph] = useState([
@@ -55,7 +56,6 @@ export default function() {
   const simulate1 = (event) => {
     event.preventDefault();
     try {
-      console.log(Algo)
       axios
         .post("http://localhost:8000/api/run_simulation/", { method: Algo })
         .then((response) => {
@@ -63,17 +63,30 @@ export default function() {
           console.log(resp.results);
           setgraph(resp.happiness);
           setdata(resp.results);
-          setdatafetch(true);
-        });
+          setdatafetch(true);}
+        )
+        .catch((err) =>{
+          if (err.response && err.response.data.alert) {
+            setAlert(err.response.data.alert);
+            setTimeout(()=> {
+              setAlert(null)
+            },3000)
+          } else {
+            setAlert({ type: 'error', message: 'An unexpected error occurred' });
+            setTimeout(()=> {
+              setAlert(null)
+            },3000)
+          }
+        })
     } catch (error) {
       if (error.response) {
         // get response with a status code not in range 2xx
-        console.log(error.response.data);
+        console.log(error.response);
         console.log(error.response.status);
         console.log(error.response.headers);
       } else if (error.request) {
         // no response
-        console.log(error.request);
+        console.log("error" ,error.request);
       } else {
         // Something wrong in setting up the request
         console.log("Error", error.message);
@@ -82,16 +95,8 @@ export default function() {
     }
   };
 
-  function handleradiochange(event) {
-    setAlgotype(event.target.value);
-  }
-
-  const handleAlgorithmChange = (event) => {
-    setAlgo(event.target.value);
-  };
-
   return (
-    <>
+    <div className="h-screen">
       <div className="flex flex-col pt-32 justify-center px-0 pb-20">
         <div className="grid grid-flow-col grid-cols-12">
           <div className="sm:border-solid sm:border-2 rounded-md py-10 px-0 drop-shadow-lg grid col-span-6 col-start-4">
@@ -105,7 +110,6 @@ export default function() {
                 Generate
               </button>
             </div>
-
             {datafetch ? (
               <div className="flex justify-center pb-3">
                 <div className="w-3/4">
@@ -136,6 +140,20 @@ export default function() {
           </div>
         </div>
       </div>
-    </>
+      {alert && <div role="alert" className="alert alert-error fixed bottom-2 w-1/4 left-2 right-0"> 
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6 shrink-0 stroke-current"
+                  fill="none"
+                  viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>{alert.message}</span>
+                </div>}
+    </div>
   );
 }

@@ -1,4 +1,3 @@
-from datetime import datetime
 
 
 class Employer:
@@ -34,7 +33,7 @@ class Employer:
         self.proposals.append(employee)
         return employee.accept_proposal(self)
 
-    def __str__(self) -> str:
+    def __str__(self):
         return self.name
 
 
@@ -47,40 +46,47 @@ class Employee:
         self.matched_employer = None
 
     def accept_proposal(self, employer):
-        # Employee accepts proposal if it's the best match
         if self.matched_employer is None:
             self.matched_employer = employer
             return True
-        elif self.preferences.index(
-            self.matched_employer.skills_required[0]
-        ) > self.preferences.index(employer.skills_required[0]):
-            self.matched_employer = employer
-            return True
         else:
-            return False
+            current_employer_skill = self.matched_employer.skills_required[0]
+            new_employer_skill = employer.skills_required[0]
 
-    def __str__(self) -> str:
+            if current_employer_skill not in self.preferences:
+                current_preference_index = len(self.preferences) + 1
+            else:
+                current_preference_index = self.preferences.index(current_employer_skill)
+
+            if new_employer_skill not in self.preferences:
+                new_preference_index = len(self.preferences) + 1
+            else:
+                new_preference_index = self.preferences.index(new_employer_skill)
+
+            if new_preference_index < current_preference_index:
+                self.matched_employer = employer
+                return True
+            else:
+                return False
+
+    def __str__(self):
         return self.name
 
 
 def gale_shapley_matching(employers, employees):
-    # Step 1: Initialization
     unmatched_employers = list(employers)
     matched_pairs = []
 
-    # Step 2: Preference List Construction
     employer_preferences = {}
     for employer in employers:
-        # Construct employer's preference list based on employee preferences
         employer_preferences[employer] = sorted(
             employees, key=lambda emp: employer.evaluate(emp)
         )
 
-    # Step 3: Matching Process
     while unmatched_employers:
         employer = unmatched_employers.pop(0)
         for employee in employer_preferences[employer]:
-            if employer.propose_to(employee):  # Employer proposes to the employee
+            if employer.propose_to(employee):
                 if employee.matched_employer is employer:
                     matched_pairs.append((employer.name, employee.name))
                     break
@@ -88,20 +94,4 @@ def gale_shapley_matching(employers, employees):
                     unmatched_employers.append(employer)
                     break
 
-    # Step 5: Output
     return matched_pairs
-
-
-# Example usage:
-# employers = [
-#    Employer("Company A", ["Python"], ["2024-07-01", "2024-07-31"]),
-#    Employer("Company B", ["Java"], ["2024-08-01", "2024-08-31"]),
-# ]
-
-# employees = [
-#    Employee("Alice", ["Python"], ["2024-06-01", "2024-08-01"], ["Python", "Java"]),
-#    Employee("Bob", ["Java"], ["2024-07-01", "2024-09-01"], ["Java", "Python"]),
-# ]
-
-# matches = gale_shapley_matching(employers, employees)
-# print(matches)

@@ -206,7 +206,7 @@ class RunSimulation(APIView):
                 )
 
             results = gale_shapely.gale_shapley_matching(Employers, Employees)
-            print(results)
+            # print(results)
             happiness = self.getHappinessScore(results)
             score = [list(happiness.keys()), list(happiness.values())]
             print(score)
@@ -248,4 +248,5 @@ class RunSimulation(APIView):
         # res['Content-Disposition'] = 'attachment'
 
         # return res
-        return Response({}, status=status.HTTP_200_OK)
+        return Response({"alert": {"type": "error", "message": "Please choose an algorithm"}}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
