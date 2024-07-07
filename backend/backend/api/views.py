@@ -248,4 +248,4 @@ class RunSimulation(APIView):
         # res['Content-Disposition'] = 'attachment'
 
         # return res
-        return Response([], status=status.HTTP_200_OK)
+        return Response({}, status=status.HTTP_200_OK)

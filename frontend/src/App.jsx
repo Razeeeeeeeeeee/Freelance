@@ -9,7 +9,8 @@ import Employer from './pages/employer'
 import Employer_manual from './pages/employer_manual'
 import Employer_offline from './pages/employer_offline'
 import Admin_panel from './pages/admin_panel'
-
+import Selectalgorithm from './pages/selectalgorithm'
+import Visualisation from './pages/visualisation'
 function App() {
 
   return (
@@ -25,6 +26,8 @@ function App() {
           <Route path = '/employer_form' element = {<Employer_manual/>}/>
           <Route path = '/employer_offline' element = {<Employer_offline/>}/>
           <Route path = '/admin_panel' element = {<Admin_panel/>}/>
+          <Route path = '/select' element = {<Selectalgorithm />}/>
+          <Route path = '/visualisation' element = {<Visualisation/>}/>
         </Routes>
      </BrowserRouter>
 

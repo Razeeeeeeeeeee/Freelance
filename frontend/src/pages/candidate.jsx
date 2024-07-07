@@ -37,7 +37,7 @@ export default function () {
     } catch (error) {
       if (error.response) {
         // get response with a status code not in range 2xx
-        alert(error.response.data);
+        alert("Error uploading file");
         console.log(error.response.data);
         console.log(error.response.status);
         console.log(error.response.headers);
@@ -70,7 +70,7 @@ export default function () {
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
-                  class="h-4 w-4 stroke-current"
+                  class="h-4 w-4 stroke-current outline-none"
                 >
                   <path
                     stroke="black"

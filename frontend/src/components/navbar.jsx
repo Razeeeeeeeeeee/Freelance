@@ -24,11 +24,14 @@ export default function(){
                 <div className="flex">
                     <Link className="btn btn-ghost text-xl" to="/candidate">Candidate</ Link>
                 </div>
-                <div className="flex">
+                 <div className="flex">
                     <Link className="btn btn-ghost text-xl" to="/employer">Employer</ Link>
                 </div>
                 <div className="flex">
-                    <Link className="btn btn-ghost text-xl" to="/admin_panel">Admin</ Link>
+                    <Link className="btn btn-ghost text-xl" to="/select">Select Algo</ Link>
+                </div>
+                <div className="flex">
+                    <Link className="btn btn-ghost text-xl" to="/visualisation">Generate Results</ Link>
                 </div>
             </div>
             </div>
