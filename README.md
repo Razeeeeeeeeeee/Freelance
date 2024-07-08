@@ -22,7 +22,7 @@ python manage.py migrate
 python manage.py runserver
 ```
 
-## Alternatively
+### Alternatively
 ```bash
 ./start.sh
 ```
