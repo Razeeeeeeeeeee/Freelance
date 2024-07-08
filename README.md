@@ -3,9 +3,8 @@ I have moved things around a bit, mostly to keep the backend and the frontend se
 The backend is configured in `django` and the frontend with `ReactJS`
 To run the website locally, clone the repo and run
 
-
 > [!TIP]
->Open two terminals, one for the backend and the other for frontend
+> Open two terminals, one for the backend and the other for frontend
 
 Terminal 1
 ```bash
@@ -23,6 +22,10 @@ python manage.py migrate
 python manage.py runserver
 ```
 
+## Alternatively
+```bash
+./start.sh
+```
 
 > [!IMPORTANT]
 > The backend endpoints are configured as follows
