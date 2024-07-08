@@ -5,9 +5,8 @@ import Graph from "../components/BarChart";
 import Table from "../components/table";
 import AppProvider from "../components/utils/StateProvider";
 import { AppContext } from "../components/utils/StateContext";
-export default function() {
-
-
+import transition from "../components/utils/transition";
+const SelectAlgo = () => {
   const { Algo, Algotype, setAlgo, setAlgotype } = useContext(AppContext);
   const [showmatched, setshowmatched] = useState(false);
 
@@ -106,4 +105,6 @@ export default function() {
       </div>
     </>
   );
-}
+};
+
+export default SelectAlgo;

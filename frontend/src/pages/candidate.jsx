@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import Card from "../components/card";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import transition from "../components/utils/transition";
 
-export default function () {
+const Candidate =  ()=> {
   const [file, setFile] = useState();
   const [name, setName] = useState("");
 
@@ -136,3 +137,5 @@ export default function () {
     </>
   );
 }
+
+export default Candidate;

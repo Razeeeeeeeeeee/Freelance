@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import transition from "../components/utils/transition";
 
-export default function(){
+const Candidate_manual = ()=>{
     
     const navigate = useNavigate();
     const initialFormData = {
@@ -201,3 +202,6 @@ export default function(){
     
     )
 }
+
+
+export default Candidate_manual;

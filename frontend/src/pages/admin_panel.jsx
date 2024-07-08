@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import Graph from "../components/BarChart";
 import Table from "../components/table";
-
-export default function () {
+import transition from "../components/utils/transition";
+const Admin = ()=> {
   const simulate = (event) => {
     event.preventDefault();
 
@@ -201,3 +201,5 @@ export default function () {
     </>
   );
 }
+
+export default Admin;
