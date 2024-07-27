@@ -1,97 +1,75 @@
 
-
 class Employer:
-    def __init__(self, name, skills_required, work_dates):
-        self.name = name
-        self.skills_required = [skill.lower() for skill in skills_required]
-        self.work_dates = work_dates
-        self.proposals = []
-
-    def evaluate(self, employee):
-        # Evaluate employee based on skills required and work dates
-        skill_match = set(self.skills_required).intersection(
-            set([skill.lower() for skill in employee.skills])
-        )
-        employee_start_date, employee_end_date = employee.available_dates
-
-        date_match = (
-            self.work_dates[0] >= employee_start_date
-            and self.work_dates[1] <= employee_end_date
-        )
-
-        if skill_match and date_match:
-            return 0
-        elif skill_match:
-            return 1
-        elif date_match:
-            return 2
-        else:
-            return 3
-
-    def propose_to(self, employee):
-        # Employer proposes to employee
-        self.proposals.append(employee)
-        return employee.accept_proposal(self)
-
-    def __str__(self):
-        return self.name
-
+    def __init__(self, name, job_name, requirements, budget, max_workers, min_workers, mode, available_from, available_till, preference_list):
+        self.name = name.lower()
+        self.job_name = job_name.lower()
+        self.requirements = set(requirement.strip().lower() for requirement in requirements.split(","))
+        self.budget = budget
+        self.max_workers = max_workers
+        self.min_workers = min_workers
+        self.mode = mode.lower()
+        self.available_from = available_from
+        self.available_till = available_till
+        self.preference_list = [pref.lower() for pref in preference_list]
+        self.matched_employees = []
 
 class Employee:
-    def __init__(self, name, skills, available_dates, preferences):
-        self.name = name
-        self.skills = [skill.lower() for skill in skills]
-        self.available_dates = available_dates
-        self.preferences = [preference.lower() for preference in preferences]
+    def __init__(self, name, skills, desired_salary, mode, available_from, available_till, preference_list):
+        self.name = name.lower()
+        self.skills = set(skill.strip().lower() for skill in skills.split(","))
+        self.desired_salary = desired_salary
+        self.mode = mode.lower()
+        self.available_from = available_from
+        self.available_till = available_till
+        self.preference_list = [pref.lower() for pref in preference_list]
         self.matched_employer = None
 
-    def accept_proposal(self, employer):
-        if self.matched_employer is None:
-            self.matched_employer = employer
-            return True
-        else:
-            current_employer_skill = self.matched_employer.skills_required[0]
-            new_employer_skill = employer.skills_required[0]
+def qualifies(employee, employer):
+    return (employee.skills.issuperset(employer.requirements) and
+            employee.desired_salary <= employer.budget and
+            employee.mode == employer.mode and
+            employee.available_from <= employer.available_from and
+            employee.available_till >= employer.available_till)
 
-            if current_employer_skill not in self.preferences:
-                current_preference_index = len(self.preferences) + 1
-            else:
-                current_preference_index = self.preferences.index(current_employer_skill)
-
-            if new_employer_skill not in self.preferences:
-                new_preference_index = len(self.preferences) + 1
-            else:
-                new_preference_index = self.preferences.index(new_employer_skill)
-
-            if new_preference_index < current_preference_index:
-                self.matched_employer = employer
-                return True
-            else:
-                return False
-
-    def __str__(self):
-        return self.name
-
-
-def gale_shapley_matching(employers, employees):
-    unmatched_employers = list(employers)
-    matched_pairs = []
-
-    employer_preferences = {}
-    for employer in employers:
-        employer_preferences[employer] = sorted(
-            employees, key=lambda emp: employer.evaluate(emp)
-        )
-
+def gale_shapley(employers, employees):
+    unmatched_employers = employers[:]
     while unmatched_employers:
         employer = unmatched_employers.pop(0)
-        for employee in employer_preferences[employer]:
-            if employer.propose_to(employee):
-                if employee.matched_employer is employer:
-                    matched_pairs.append((employer.name, employee.name))
-                    break
+        for employee_name in employer.preference_list:
+            employee = next(e for e in employees if e.name == employee_name)
+            if qualifies(employee, employer):
+                if employee.matched_employer is None:
+                    employer.matched_employees.append(employee)
+                    employee.matched_employer = employer
+                    if len(employer.matched_employees) >= employer.max_workers:
+                        break
                 else:
-                    unmatched_employers.append(employer)
-                    break
+                    current_employer = employee.matched_employer
+                    if employee.preference_list.index(employer.name) < employee.preference_list.index(current_employer.name):
+                        current_employer.matched_employees.remove(employee)
+                        if len(current_employer.matched_employees) < current_employer.min_workers:
+                            unmatched_employers.append(current_employer)
+                        employer.matched_employees.append(employee)
+                        employee.matched_employer = employer
+                        if len(employer.matched_employees) >= employer.max_workers:
+                            break
 
-    return matched_pairs
+    return [(employer.name, [e.name for e in employer.matched_employees]) for employer in employers]
+
+# Example Usage
+# employers = [
+#     Employer("Employer1", "Software Developer", "Python, sql", 100000, 3, 1, "online", "2023-01-01", "2023-12-31", ["Employee1", "Employee2"]),
+#     Employer("Employer2", "Data Scientist", "Python, Machine Learning", 120000, 2, 1, "offline", "2023-02-01", "2023-11-30", ["Employee3", "Employee4"])
+# ]
+#
+# employees = [
+#     Employee("Employee1", "Python, SQL, JavaScript", 90000, "online", "2023-01-01", "2023-12-31", ["Employer1", "Employer2"]),
+#     Employee("Employee2", "Python, SQL, Java", 95000, "online", "2023-03-01", "2023-12-31", ["Employer2", "Employer1"]),
+#     Employee("Employee3", "Python, Machine Learning, R", 110000, "offline", "2023-02-01", "2023-11-30", ["Employer2", "Employer1"]),
+#     Employee("Employee4", "Python, Machine Learning, Java", 115000, "offline", "2023-05-01", "2023-10-31", ["Employer1", "Employer2"])
+# ]
+#
+# matches = gale_shapley(employers, employees)
+# for match in matches:
+#     print(f"{match[0].capitalize()} matched with {', '.join([e.capitalize() for e in match[1]])}")
+
