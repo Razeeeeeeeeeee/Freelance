@@ -44,10 +44,11 @@ const Visualisation =  ()=> {
   const [alert, setAlert] = useState(null);
   const [data, setdata] = useState([]);
   const [datafetch, setdatafetch] = useState(false);
-  const [graph, setgraph] = useState([
+  const [graph1, setgraph1] = useState([
     ["A", "B", "C", "D"],
     [10, 23, 20, 34],
   ]);
+ const [graph2, setgraph2] = useState([]);
 
   const myRef = useRef(null)
   //const [Algotype, setAlgotype] = useState("skill");
@@ -63,8 +64,9 @@ const Visualisation =  ()=> {
         .post("http://localhost:8000/api/run_simulation/", { method: Algo })
         .then((response) => {
           const resp = JSON.parse(response.data);
-          console.log(resp.results);
-          setgraph(resp.happiness);
+          console.log(resp);
+          setgraph1(resp.happiness_employee);
+          setgraph2(resp.happiness_employer);
           setdata(resp.results);
           setdatafetch(true);
         })
@@ -121,6 +123,7 @@ const Visualisation =  ()=> {
               </button>
             </div>
             {datafetch ? (
+              <div>
               <motion.div 
               initial = {{opacity:0}}
               animate = {{opacity:1}}
@@ -128,11 +131,26 @@ const Visualisation =  ()=> {
               className="flex justify-center pb-3">
                 <div className="w-3/4" ref = {myRef}>
                   <h3 className="font-bold pb-5 text-1xl underline">
-                    Bar Graph
+                    Employer Happiness
                   </h3>{" "}
-                  <Graph data={graph} />
+                  <Graph data={graph1} id="employer_chart"/>
+                </div>{" "} 
+              </motion.div>
+              <motion.div 
+              initial = {{opacity:0}}
+              animate = {{opacity:1}}
+              transition={{duration:2}}
+              className="flex justify-center pb-3">
+
+              <div className="w-3/4">
+                  <h3 className="font-bold pb-5 text-1xl underline">
+                    Employee Happiness
+                  </h3>{" "}
+                  <Graph data={graph2} id="employee_chart" />
                 </div>{" "}
               </motion.div>
+              </div>
+
             ) : (
               <div></div>
             )}<AnimatePresence>

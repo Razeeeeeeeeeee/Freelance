@@ -92,6 +92,7 @@ const Employer=()=> {
                     The excel file should contain the following columns
                   </p>
                   <ul className="text-left font-medium list-disc pl-3">
+                    <li>employer name</li>
                     <li>job name</li>
                     <li>requirements</li>
                     <li>budget</li>

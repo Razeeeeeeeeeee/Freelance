@@ -148,7 +148,7 @@ class RunSimulation(APIView):
             run = False
             return None
 
-    def getHappinessScore(self, results):
+    def getHappinessScore(self, matches,employers,employees):
         """
         function to find the happiness score from the results
         Args :
@@ -157,28 +157,24 @@ class RunSimulation(APIView):
         Returns :
             happiness score as a key value pair
         """
-        happiness = {
-            33: 0,
-            67: 0,
-            100: 0,
-        }
+        
+        happiness_scores_employee = {}
+        happiness_scores_employer = {}
 
-        df = self.candidate_file
-        df2 = self.employer_file
-        for result in results:
-            emp = result[1]
-            jobassigned = result[0]
-            index2 = df2.index[df2["job name"] == jobassigned].tolist()
-            index = df.index[df["candidate name"] == emp].tolist()
-            reqs = df2.loc[index2, "requirements"].tolist()[0].strip().lower()
-            if df.loc[index, "preference 1"].tolist()[0].strip().lower() == reqs:
-                happiness[100] += 1
-            elif df.loc[index, "preference 2"].tolist()[0].strip().lower() == reqs:
-                happiness[67] += 1
-            else:
-                happiness[33] += 1
+        for employer_name, employee_names in matches:
+            employer = next(e for e in employers if e.name == employer_name)
+            for employee_name in employee_names:
+                employee = next(e for e in employees if e.name == employee_name)
+            
+            # Employer's happiness
+                employer_happiness = 1 - employer.preference_list.index(employee_name) / len(employer.preference_list)
+                happiness_scores_employer[employer.name] = employer_happiness
+            
+            # Employee's happiness
+                employee_happiness = 1 - employee.preference_list.index(employer_name) / len(employee.preference_list)
+                happiness_scores_employee[employee.name] = employee_happiness
 
-        return happiness
+        return happiness_scores_employee,happiness_scores_employer
 
     def post(self, request, *args, **kwargs):
         # min_size = min(len(candidate_file),len(employee_file))
@@ -197,11 +193,12 @@ class RunSimulation(APIView):
                         row["preference list"]
                     )
                 )
+            # print(Employees)
             Employers = []
             for _, row in self.employer_file.iterrows():
                 Employers.append(
                     gale_shapely.Employer(
-                        row['name'],
+                        row['employer name'],
                         row["job name"],
                         row["requirements"],
                         row["budget"],
@@ -215,14 +212,14 @@ class RunSimulation(APIView):
                 )
 
             results = gale_shapely.gale_shapley(Employers, Employees)
-            # print(results)
-            happiness = self.getHappinessScore(results)
-            score = [list(happiness.keys()), list(happiness.values())]
-            print(score)
+            print(results)
+            happiness_scores_employer,happiness_scores_employee = self.getHappinessScore(results,Employers,Employees)
             response = {
                 "results": results,
-                "happiness": score,
+                "happiness_employee": happiness_scores_employee ,
+                "happiness_employer": happiness_scores_employer,
             }
+            print(response)
             return Response(json.dumps(response), status=status.HTTP_200_OK)
             # print(request.data["method"])
 

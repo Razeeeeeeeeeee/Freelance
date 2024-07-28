@@ -98,9 +98,7 @@ const Candidate =  ()=> {
                     <li>mode</li>
                     <li>available from</li>
                     <li>available till</li>
-                    <li>preference 1</li>
-                    <li>preference 2</li>
-                    <li>preference 3</li>
+                    <li>preference list</li>
                   </ul>
                 </div>
               </div>

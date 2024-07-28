@@ -1,3 +1,6 @@
+
+import React from "react";
+
 export default function ({ data }) {
   return (
     <table className="table table-pin-rows">
@@ -11,13 +14,27 @@ export default function ({ data }) {
 
       <tbody>
         {data.map((item, index) => (
-          <tr key={index}>
-            <th> {index + 1} </th>
-            <td className="text-center">{item[0]}</td>
-            <td className="text-center">{item[1]}</td>
-          </tr>
+          <React.Fragment key={index}>
+            {item[1].map((employee, empIndex) => (
+              <tr key={`${index}-${empIndex}`}>
+                {empIndex === 0 && (
+                  <th rowSpan={item[1].length}>{index + 1}</th>
+                )}
+                {empIndex === 0 && (
+                  <td
+                    className="text-center"
+                    rowSpan={item[1].length}
+                  >
+                    {item[0]}
+                  </td>
+                )}
+                <td className="text-center">{employee}</td>
+              </tr>
+            ))}
+          </React.Fragment>
         ))}
       </tbody>
     </table>
   );
 }
+
