@@ -35,9 +35,7 @@ class CandidateFileUploadAPIView(APIView):
         "mode",
         "available from",
         "available till",
-        "preference 1",
-        "preference 2",
-        "preference 3",
+        "preference list"
     ]
 
     def post(self, request, *args, **kwargs):
@@ -75,6 +73,7 @@ class EmployeeFileUploadAPIView(APIView):
         "mode",
         "available from",
         "available till",
+        "preference list"
     ]
 
     def post(self, request, *args, **kwargs):
@@ -190,22 +189,32 @@ class RunSimulation(APIView):
                 Employees.append(
                     gale_shapely.Employee(
                         row["candidate name"],
-                        row["skills"].split(","),
-                        [row["available from"], row["available till"]],
-                        [row["preference 1"], row["preference 2"], row["preference 3"]],
+                        row["skills"],
+                        row["desired salary"],
+                        row["mode"],
+                        row["available from"],
+                        row["available till"],
+                        row["preference list"]
                     )
                 )
             Employers = []
             for _, row in self.employer_file.iterrows():
                 Employers.append(
                     gale_shapely.Employer(
+                        row['name'],
                         row["job name"],
                         row["requirements"],
-                        [row["available from"], row["available till"]],
+                        row["budget"],
+                        row["max workers"],
+                        row["min workers"],
+                        row["mode"],
+                        row["available from"],
+                        row["available till"],
+                        row["preference list"],
                     )
                 )
 
-            results = gale_shapely.gale_shapley_matching(Employers, Employees)
+            results = gale_shapely.gale_shapley(Employers, Employees)
             # print(results)
             happiness = self.getHappinessScore(results)
             score = [list(happiness.keys()), list(happiness.values())]

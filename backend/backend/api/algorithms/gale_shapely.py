@@ -10,7 +10,7 @@ class Employer:
         self.mode = mode.lower()
         self.available_from = available_from
         self.available_till = available_till
-        self.preference_list = [pref.lower() for pref in preference_list]
+        self.preference_list = [pref.strip().lower() for pref in preference_list.split(",")]
         self.matched_employees = []
 
 class Employee:
@@ -21,7 +21,7 @@ class Employee:
         self.mode = mode.lower()
         self.available_from = available_from
         self.available_till = available_till
-        self.preference_list = [pref.lower() for pref in preference_list]
+        self.preference_list = [pref.strip().lower() for pref in preference_list.split(",")]
         self.matched_employer = None
 
 def qualifies(employee, employer):
@@ -56,17 +56,17 @@ def gale_shapley(employers, employees):
 
     return [(employer.name, [e.name for e in employer.matched_employees]) for employer in employers]
 
-# Example Usage
+# # Example Usage
 # employers = [
-#     Employer("Employer1", "Software Developer", "Python, sql", 100000, 3, 1, "online", "2023-01-01", "2023-12-31", ["Employee1", "Employee2"]),
-#     Employer("Employer2", "Data Scientist", "Python, Machine Learning", 120000, 2, 1, "offline", "2023-02-01", "2023-11-30", ["Employee3", "Employee4"])
+#     Employer("Employer1", "Software Developer", "Python, SQL", 100000, 3, 1, "online", "2023-01-01", "2023-12-31", "Employee1, Employee2"),
+#     Employer("Employer2", "Data Scientist", "Python, Machine Learning", 120000, 2, 1, "offline", "2023-02-01", "2023-11-30", "Employee3, Employee4")
 # ]
 #
 # employees = [
-#     Employee("Employee1", "Python, SQL, JavaScript", 90000, "online", "2023-01-01", "2023-12-31", ["Employer1", "Employer2"]),
-#     Employee("Employee2", "Python, SQL, Java", 95000, "online", "2023-03-01", "2023-12-31", ["Employer2", "Employer1"]),
-#     Employee("Employee3", "Python, Machine Learning, R", 110000, "offline", "2023-02-01", "2023-11-30", ["Employer2", "Employer1"]),
-#     Employee("Employee4", "Python, Machine Learning, Java", 115000, "offline", "2023-05-01", "2023-10-31", ["Employer1", "Employer2"])
+#     Employee("Employee1", "Python, SQL, JavaScript", 90000, "online", "2023-01-01", "2023-12-31", "Employer1, Employer2"),
+#     Employee("Employee2", "Python, SQL, Java", 95000, "online", "2023-03-01", "2023-12-31", "Employer2, Employer1"),
+#     Employee("Employee3", "Python, Machine Learning, R", 110000, "offline", "2023-02-01", "2023-11-30", "Employer2, Employer1"),
+#     Employee("Employee4", "Python, Machine Learning, Java", 115000, "offline", "2023-05-01", "2023-10-31", "Employer1, Employer2")
 # ]
 #
 # matches = gale_shapley(employers, employees)
