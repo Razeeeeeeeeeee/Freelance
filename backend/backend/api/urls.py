@@ -3,7 +3,7 @@ from django.urls import path
 from .views import (
     EmployeeFileUploadAPIView,
     CandidateFileUploadAPIView,
-    RunSimulation,
+    RunSimulation,Employer_ms_sc_view,Candidate_ms_sc_view
 )
 from .views import manualCandidateFileUpload
 
@@ -20,4 +20,6 @@ urlpatterns = [
         manualCandidateFileUpload.as_view(),
         name="manual_candidate_file_upload",
     ),
+    path('employer/', Employer_ms_sc_view.as_view()),
+    path('candidate/', Candidate_ms_sc_view.as_view()),
 ]

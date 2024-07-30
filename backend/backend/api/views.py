@@ -5,7 +5,7 @@ from django.http import HttpResponse
 
 import math
 import numpy as np
-from ..User.models import Employer,Candidate
+from models import Employer_ms,Candidate_ms
 
 # Create your views here.
 from rest_framework import status
@@ -24,6 +24,8 @@ from .serializers import (
     EmployeeFileUploadSerializer,
     CandidateEntrySerializer,
     EmployeeEntrySerializer,
+    EmployeeSerializer_ms,
+    CandidateSerializer_ms,
 )
 import json
 from .algorithms import gale_shapely
@@ -450,8 +452,8 @@ class RunSimulation(APIView):
 
 
         if request.data["method"] == "greedy":
-            list_of_tasks = [tasks for tasks in Employer.objects.all()]
-            list_of_workers = [workers for workers in Candidate.objects.all()]
+            list_of_tasks = [tasks for tasks in Employer_ms.objects.all()]
+            list_of_workers = [workers for workers in Candidate_ms.objects.all()]
             output  =  self.ms_sc_greedy(list_of_tasks,list_of_workers)
             #output = [['rut','frontend',100]]
             results = [[i[0],i[1]] for i in output]
@@ -463,8 +465,8 @@ class RunSimulation(APIView):
             return Response(json.dumps(response), status=status.HTTP_200_OK)
 
         if request.data["method"] == "gdc":
-            list_of_tasks = [tasks for tasks in Candidate.objects.all()]
-            list_of_workers = [workers for workers in Employer.objects.all()]
+            list_of_tasks = [tasks for tasks in Candidate_ms.objects.all()]
+            list_of_workers = [workers for workers in Employer_ms.objects.all()]
             output  =  self.ms_sc_gdc(list_of_tasks,list_of_workers)
             #output = [['rut','frontend',100]]
             results = [[i[0],i[1]] for i in output]
@@ -477,8 +479,8 @@ class RunSimulation(APIView):
 
         
         if request.data["method"] == "adaptive":
-            list_of_tasks = [tasks for tasks in Employer.objects.all()]
-            list_of_workers = [workers for workers in Candidate.objects.all()]
+            list_of_tasks = [tasks for tasks in Employer_ms.objects.all()]
+            list_of_workers = [workers for workers in Candidate_ms.objects.all()]
             output  =  self.ms_sc_greedy(list_of_tasks,list_of_workers)
             #output = [['rut','frontend',100]]
             results = [[i[0],i[1]] for i in output]
@@ -491,7 +493,7 @@ class RunSimulation(APIView):
 
 
 
-        # candidate_file = candidate_file.iloc[:min_size]
+        # Candidate_ms_file = candidate_file.iloc[:min_size]
         # candidate_file.reset_index(drop=True,inplace = True)
         # employee_file = employee_file.iloc[:min_size]
         # employee_file.reset_index(drop=True, inplace= True)
@@ -519,3 +521,22 @@ class RunSimulation(APIView):
         # return res
         return Response({"alert": {"type": "error", "message": "Please choose an algorithm"}}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
+class Employer_ms_sc_view(APIView):
+    def post(self,request):
+        serializer = EmployeeSerializer_ms(data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
+        else:
+            return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+class Candidate_ms_sc_view(APIView):
+
+
+    def post(self,request):
+        serializer = CandidateSerializer_ms(data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
+        else:
+            return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
