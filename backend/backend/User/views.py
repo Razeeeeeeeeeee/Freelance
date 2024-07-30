@@ -242,6 +242,58 @@ class Run_Simulation_ms_sc_gdc(APIView):
         return Sol
 
 
+class Run_simulation_ms_sc_adaptive(APIView):
+
+    def post(self,request):
+        list_of_tasks = [tasks for tasks in Employer.objects.all()]
+        list_of_workers = [workers for workers in Candidate.objects.all()]
+        output  =  self.ms_sc_greedy(list_of_tasks,list_of_workers)
+        #output = [['rut','frontend',100]]
+        results = [[i[0],i[1]] for i in output]
+        scores = [i[2] for i in output]
+        response = {
+                "results": results,
+                "happiness": scores,
+            }
+        return Response(json.dumps(response), status=status.HTTP_200_OK)
+     
+     
+    def calc_costgreedy(list_of_tasks,list_of_workers):
+        G = Run_simulation_ms_sc_greedy.generate_graph(list_of_tasks,list_of_workers)
+        G1 = Run_Simulation_ms_sc_gdc.generate_graph1(list_of_tasks,list_of_workers)
+        degw = Run_Simulation_ms_sc_gdc.calculate_degree(G)
+        degt = Run_Simulation_ms_sc_gdc.calculate_degree(G1)
+        m = len(list_of_tasks)
+        n = len(list_of_workers)
+        costg = m*n + n*degt*(3*m + degw) + m*degt**2
+        return costg
+
+    def calc_costgdc(n,degree,m,g,list_of_tasks,list_of_workers):
+        m = len(list_of_tasks)
+        n = len(list_of_workers)
+        return (m*g+n)(degree-1)
+
+
+    def ms_sc_adaptive(self,list_of_workers,list_of_tasks):
+        Ip = []
+        cost_greedy = self.calc_costgreedy(list_of_tasks,list_of_workers)
+        cost_gdc = self.calc_costgdc()
+        if cost_gdc < cost_greedy:
+            Ip = Run_simulation_ms_sc_greedy.ms_sc_greedy(list_of_workers,list_of_tasks)
+        else:
+            graph = Run_Simulation_ms_sc_gdc.generate_graph1(list_of_tasks,list_of_workers)
+            degree = Run_Simulation_ms_sc_gdc.calculate_degree(graph)
+            g = Run_Simulation_ms_sc_gdc.calculate_g(len(list_of_tasks),degree)
+            sub_problems = Run_Simulation_ms_sc_gdc.ms_sc_decomp(list_of_workers,list_of_tasks,g)
+            Ips = []
+            for i in range(g):
+                Ips.append([])
+            for i in sub_problems : 
+                Ips[i] = self.ms_sc_adaptive(i[0],i[1])
+            for i in range(g):
+                Ip = Run_Simulation_ms_sc_gdc.ms_sc_conflict_reconcile(Ip,Ips[i])
+        return Ip
+
         
         
     
