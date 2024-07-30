@@ -72,7 +72,9 @@ const SelectAlgo = () => {
                 >
                   <option disabled>Skill Based Algorithms</option>
                   <option value="gale-shapely">Gale Shapely</option>
-                  <option>Greedo</option>
+                  <option value = "greedy">MS_SC_Greedy</option>
+                  <option value = "gdc"> MS_SC_GDC</option>
+                  <option value = "adaptive">MS_SC_Adaptive</option>
                 </select>
               </div>
 
