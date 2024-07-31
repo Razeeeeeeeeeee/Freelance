@@ -5,7 +5,7 @@ from django.http import HttpResponse
 
 import math
 import numpy as np
-from models import Employer_ms,Candidate_ms
+from .models import Employer_ms,Candidate_ms
 
 # Create your views here.
 from rest_framework import status
