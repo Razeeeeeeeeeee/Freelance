@@ -21,7 +21,7 @@ export default function(){
 
    const subform = (event)=>{
       axios.post(
-      "http://127.0.0.1:8000/user/employer/",
+      "http://127.0.0.1:8000/api/employer/",
       {
         "name": formData.Jobname,
         "skills":formData.Skillrequirement,

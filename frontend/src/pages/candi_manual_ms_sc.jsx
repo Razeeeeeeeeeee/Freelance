@@ -22,7 +22,7 @@ export default function(){
       console.log("Preferences",preferences);
       const preference_string = preferences.join(',');
       axios.post(
-      "http://127.0.0.1:8000/user/candidate/",
+      "http://127.0.0.1:8000/api/candidate/",
       {
         "name": formData.Jobname,
         "skills":formData.Skillrequirement,
